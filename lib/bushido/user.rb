@@ -32,7 +32,7 @@ module Bushido
 
       def update_account(account)
         print "Storing account information..."
-        Dir.mkdir "#{Bushido::Utils.home_directory}/.bushido" unless Dir.exists? "#{Bushido::Utils.home_directory}/.bushido"
+        Dir.mkdir "#{Bushido::Utils.home_directory}/.bushido" unless (File.exist?("#{Bushido::Utils.home_directory}/.bushido") and File.directory?("#{Bushido::Utils.home_directory}/.bushido"))
         File.open(File.expand_path("#{Bushido::Utils.home_directory}/.bushido/config.json"), 'w') { |f| f.write(account.to_json) }
         puts " Done!"
       end
