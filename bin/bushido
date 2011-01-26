@@ -1,0 +1,50 @@
+#!/usr/bin/env ruby
+require './lib/bushido'
+
+options = {}
+
+commands = [:create, :destroy, :reload]
+help_docs = {:create => "bushido create [NAME] - creates a new app"}
+
+OptionParser.new do |opts|
+  opts.banner = "Usage: bushido <command>"
+
+  opts.on("-v", "--[no-]verbose", "Run verbosely") do |v|
+    options[:verbose] = v
+  end
+
+  opts.on("-h", "--help [command]", commands, "Help (this screen)") do |h|
+    if h.nil?
+      puts opts
+      puts "Supported commands: create, names"
+      exit
+    end
+
+    puts help_docs[h]
+    exit
+  end
+
+  opts.on_tail("-V", "--version", "Show version") do
+    puts Bushido::VERSION.join('.')
+    exit
+  end
+end.parse!
+
+command = ARGV.first
+
+if command
+  case command.downcase.to_sym
+  when :reauth  then Bushido::User.reauth
+  when :claim   then Bushido::App.claim(ARGV[1])
+  when :list    then Bushido::App.list()
+  when :create  then Bushido::App.create(ARGV[1])
+  when :show    then Bushido::App.show(ARGV[1])
+  when :start   then Bushido::App.start(ARGV[1])
+  when :stop    then Bushido::App.stop(ARGV[1])
+  when :restart then Bushido::App.restart(ARGV[1])
+  when :update  then Bushido::App.update(ARGV[1])
+  end
+else
+  puts "usage: bushido <command>\n\nSee bushido -h for more detailed instructions"
+  puts "Supported commands: create, names"
+end
