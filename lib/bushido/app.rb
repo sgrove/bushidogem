@@ -2,7 +2,9 @@ module Bushido
   class App
     class << self
       def create(url)
-        puts "Creating account for #{Bushido::User.email}..."
+        Bushido::User.load_account
+
+        puts "Creating from #{url} for #{Bushido::User.email}..."
 
         post({:app => {:url => url}})
       end
@@ -15,6 +17,12 @@ module Bushido
         end
       end
 
+      def open(name)
+        location = "http://#{name}.#{Bushido::Temple.gsub('http://','')}"
+        puts "Opening \"#{location}\" ..."
+        exec "open #{location}"
+      end
+
       def get(name, params={})
         url = "#{Temple}/apps/#{name}"
         Bushido::Command.get_command(url, params)
@@ -24,35 +32,12 @@ module Bushido
         url = "#{Temple}/apps/#{app}.json"
         params = {:command => command}
 
-        show_response Bushido::Command.put_command(url, params)
+        Bushido::Command.show_response Bushido::Command.put_command(url, params)
       end
 
       def post(params)
         url = "#{Temple}/apps"
-        show_response Bushido::Command.post_command(url, params)
-      end
-
-      def show_response(response)
-        show_messages response
-        show_errors   response
-      end
-
-      def show_messages(response)
-        if response["messages"]
-          puts "Messages:"
-          response["messages"].each_with_index do |error, counter|
-            puts "\t#{counter + 1}. #{error}"
-          end
-        end
-      end
-
-      def show_errors(response)
-        if response["errors"]
-          puts "Errors:"
-          response["errors"].each_with_index do |error, counter|
-            puts "\t#{counter + 1}. #{error}"
-          end
-        end
+        Bushido::Command.show_response Bushido::Command.post_command(url, params)
       end
 
       def show(name)

@@ -5,42 +5,43 @@ module Bushido
         load_config || {}
       end
 
+      def clear_config
+        print "Clearing out all local bushido configuration..."
+        FileUtils.rm_rf "#{Bushido::Utils.home_directory}/.bushido/"
+        puts "done"
+      end
+
       def load_config
         begin
-          return JSON.parse(File.open(File.expand_path("~/.bushido/config.json"), 'r') { |l| l.read })
+          return JSON.parse(File.open(File.expand_path("#{Bushido::Utils.home_directory}/.bushido/config.json"), 'r') { |l| l.read })
         rescue Errno::ENOENT
         end
       end
 
       def load_account
         begin
-          @account = JSON.parse(File.open(File.expand_path("~/.bushido/config.json"), 'r') { |l| l.read })
+          @account = JSON.parse(File.open(File.expand_path("#{Bushido::Utils.home_directory}/.bushido/config.json"), 'r') { |l| l.read })
         rescue Errno::ENOENT
-          @account = retrieve_account
+          @account = retrieve_account("Couldn't find your Bushido config on this machine.")
         end
       end
 
       def reauth
-        retrieve_account
+        retrieve_account("Re-authenticating your account.")
       end
 
       def update_account(account)
         print "Storing account information..."
-        File.open(File.expand_path("~/.bushido/config.json"), 'w') { |f| f.write(account.to_json) }
+        Dir.mkdir "#{Bushido::Utils.home_directory}/.bushido" unless Dir.exists? "#{Bushido::Utils.home_directory}/.bushido"
+        File.open(File.expand_path("#{Bushido::Utils.home_directory}/.bushido/config.json"), 'w') { |f| f.write(account.to_json) }
         puts " Done!"
       end
 
-      def retrieve_account
+      def retrieve_account(msg)
+        puts "#{msg} Enter your username and password, and we'll either retrieve if from your existing account on our servers, or create a new account for you."
         credentials = self.prompt_for_credentials
 
-        raw = RestClient.get "#{Bushido::Temple}/users/verify.json", {:params => {:email => credentials[:email], :password => credentials[:password]}, :accept => :json}
-
-        begin
-          result = JSON.parse(raw)
-        rescue
-          puts "Our servers didn't respond properly while trying to retrieve the account, this seems to be an issue on our end. Please email us at support@bushi.do to clear this up."
-          exit 1
-        end
+        result = Bushido::Command.put_command "#{Bushido::Temple}/users/verify", {:email => credentials[:email], :password => credentials[:password]}, {:force => true}
 
         if result["authentication_token"] and result["error"].nil?
           update_account({:email => credentials[:email], :authentication_token => result["authentication_token"]})
@@ -49,7 +50,7 @@ module Bushido
           puts result["error"]
           if result["error_type"] == "verification_failure"
             puts ""
-            print "If this is your first time using Bushido, would you like to create an account using the email and password you just entered?\n[y/n]"
+            print "If this is your first time using Bushido, would you like to create an account using the email and password you just entered?\n[y/n] "
             if $stdin.gets.chomp == "y"
               self.create_account(credentials)
             else
@@ -61,31 +62,16 @@ module Bushido
 
       def create_account(credentials)
         # GET instead of POST because of AuthenticityToken issues. Deal with it later.
-        begin 
-          raw = RestClient.get "#{Bushido::Temple}/users/create.json", {:params => {:email => credentials[:email], :password => credentials[:password], :accept => :json}}
-        rescue RestClient::UnprocessableEntity
-          puts "We ran into an error registering, either our site is down or that name is registered."
+        result = Bushido::Command.post_command "#{Bushido::Temple}/users/create.json", {:email => credentials[:email], :password => credentials[:password]}
+
+        Bushido::Command.show_response result
+
+        if result["errors"].nil?
+          update_account result
+          return credentials
+        else
           exit 1
         end
-
-        begin
-          result = JSON.parse(raw)
-          #puts result.inspect
-          #puts "----------------------------------------------------------------------"
-        rescue JSON::ParserError
-          puts "Our servers didn't respond properly while trying to create an account, this seems to be an issue on our end. Please email us at support@bushi.do to clear this up."
-          exit 1
-        end
-
-        if result["errors"]
-          puts "There were some errors registering: "
-          
-          result["errors"].each_pair { |field, error| puts "  #{field.capitalize} #{error}" }
-          exit 1
-        end
-
-        update_account result
-        return credentials
       end
 
       def authentication_token

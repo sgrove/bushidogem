@@ -9,6 +9,10 @@ module Bushido
           yield
         end
       end
+
+      def home_directory
+        ENV['HOME']
+      end
     end
   end
 end

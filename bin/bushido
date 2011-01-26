@@ -1,10 +1,24 @@
 #!/usr/bin/env ruby
-require './lib/bushido'
+require 'bushido'
 
 options = {}
 
-commands = [:create, :destroy, :reload]
-help_docs = {:create => "bushido create [NAME] - creates a new app"}
+commands = [:reauth, :remove_account, :claim,  :list, :create, :show, :start, :stop, :restart, :update, :open]
+
+help_docs = {
+  :reauth => "bushido reauth - Reauthorize this machine to work under your Bushido account",
+  :remove_account => "bushido remove_account - Removes all Bushido information from this machine",
+  :claim => "bushido claim [NAME] - Claim a running Bushido app as your own",
+  :list => "bushido list - List all of your deployed Bushido apps",
+  :create => "bushido create [URL] - Deploy a Bushido app from a git repository in URL",
+  :show =>  "bushido show [NAME] - Provide a detailed view of the Bushido app",
+  :start => "bushido start [NAME] - Turns the app on if it's been shut down for any reason",
+  :stop => "bushido stop [NAME] - Turns the app off to prevent any access",
+  :restart => "bushido restart [NAME] - Performace a stop and start in succession" ,
+  :update => "bushido update [NAME] - Will stop the running bushido app, pull from the url originally supplied to the app, update in place, and start back up",
+  :open => "bushido open [NAME] - Open browser window to the running Bushido app",
+  :create => "bushido create [NAME] - creates a new app"
+}
 
 OptionParser.new do |opts|
   opts.banner = "Usage: bushido <command>"
@@ -16,7 +30,7 @@ OptionParser.new do |opts|
   opts.on("-h", "--help [command]", commands, "Help (this screen)") do |h|
     if h.nil?
       puts opts
-      puts "Supported commands: create, names"
+      puts "Supported commands: #{commands.join(', ')}"
       exit
     end
 
@@ -34,17 +48,19 @@ command = ARGV.first
 
 if command
   case command.downcase.to_sym
-  when :reauth  then Bushido::User.reauth
-  when :claim   then Bushido::App.claim(ARGV[1])
-  when :list    then Bushido::App.list()
-  when :create  then Bushido::App.create(ARGV[1])
-  when :show    then Bushido::App.show(ARGV[1])
-  when :start   then Bushido::App.start(ARGV[1])
-  when :stop    then Bushido::App.stop(ARGV[1])
-  when :restart then Bushido::App.restart(ARGV[1])
-  when :update  then Bushido::App.update(ARGV[1])
+  when :reauth          then Bushido::User.reauth
+  when :remove_account  then Bushido::User.clear_config
+  when :claim           then Bushido::App.claim(ARGV[1])
+  when :list            then Bushido::App.list()
+  when :create          then Bushido::App.create(ARGV[1])
+  when :show            then Bushido::App.show(ARGV[1])
+  when :start           then Bushido::App.start(ARGV[1])
+  when :stop            then Bushido::App.stop(ARGV[1])
+  when :restart         then Bushido::App.restart(ARGV[1])
+  when :update          then Bushido::App.update(ARGV[1])
+  when :open            then Bushido::App.open(ARGV[1])
   end
 else
   puts "usage: bushido <command>\n\nSee bushido -h for more detailed instructions"
-  puts "Supported commands: create, names"
+  puts "Supported commands: #{commands.join(', ')}"
 end

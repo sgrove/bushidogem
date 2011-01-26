@@ -8,9 +8,11 @@ Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Sean Grove"]
   s.email       = ["s@bushi.do"]
-  s.homepage    = ""
+  s.homepage    = "http://trapm.com"
   s.summary     = %q{Command-lin interface for bushi.do}
-  s.description = %q{A command line tool to do everything with bushido, from signing up and deploying apps, to claiming, restarting, and updating existing apps}
+  s.description = %q{A command line tool to do everything with bushido, from signing up and deploying new apps, to claiming, restarting, and updating existing apps}
+
+  s.add_dependency "rest-client"
 
   s.rubyforge_project = "bushido"
 
