@@ -40,6 +40,7 @@ module Bushido
       def retrieve_account(msg)
         puts "#{msg} Enter your username and password, and we'll either retrieve if from your existing account on our servers, or create a new account for you."
         credentials = self.prompt_for_credentials
+        puts "Please wait while we look up the account information..."
 
         result = Bushido::Command.put_command "#{Bushido::Temple}/users/verify", {:email => credentials[:email], :password => credentials[:password]}, {:force => true}
 

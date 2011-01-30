@@ -13,6 +13,8 @@ Gem::Specification.new do |s|
   s.description = %q{A command line tool to do everything with bushido, from signing up and deploying new apps, to claiming, restarting, and updating existing apps}
 
   s.add_dependency "rest-client", ">=1.6.1"
+  s.add_dependency "json",        ">=1.4.6"
+  s.add_dependency "highline",    ">=1.6.1"
 
   s.rubyforge_project = "bushido"
 

@@ -48,7 +48,7 @@ command = ARGV.first
 
 if command
   case command.downcase.to_sym
-  when :reauth          then Bushido::User.reauth
+  when :login           then Bushido::User.reauth
   when :remove_account  then Bushido::User.clear_config
   when :claim           then Bushido::App.claim(ARGV[1])
   when :list            then Bushido::App.list()
