@@ -3,10 +3,11 @@ require 'bushido'
 
 options = {}
 
-commands = [:reauth, :remove_account, :claim,  :list, :create, :show, :start, :stop, :restart, :update, :open]
+commands = [:login, :remove_account, :claim,  :list, :create, :show, :start, :stop, :restart, :update, :open, :logs, :add_var, :remove_var, :api_key].sort
 
 help_docs = {
-  :reauth => "bushido reauth - Reauthorize this machine to work under your Bushido account",
+  :login => "bushido login - Authorizes this machine to work under your Bushido account",
+  :api_key => "bushido api_key - Prints out your Bushido API key for use elsewhere (in the bushido development webapp, for example)",
   :remove_account => "bushido remove_account - Removes all Bushido information from this machine",
   :claim => "bushido claim [NAME] - Claim a running Bushido app as your own",
   :list => "bushido list - List all of your deployed Bushido apps",
@@ -17,7 +18,10 @@ help_docs = {
   :restart => "bushido restart [NAME] - Performace a stop and start in succession" ,
   :update => "bushido update [NAME] - Will stop the running bushido app, pull from the url originally supplied to the app, update in place, and start back up",
   :open => "bushido open [NAME] - Open browser window to the running Bushido app",
-  :create => "bushido create [NAME] - creates a new app"
+  :create => "bushido create [NAME] - Creates a new app",
+  :logs => "bushido logs [NAME] - Retrieves all of the logs for an app and returns them in a JSON structure",
+  :add_var => "bushido add_var [NAME] [KEY] [VALUE] - Adds an environmental variable for an app to use",
+  :remove_var => "bushido remove_var [NAME] [KEY] - Removes an existing environmental variable from an app"
 }
 
 OptionParser.new do |opts|
@@ -49,7 +53,9 @@ command = ARGV.first
 if command
   case command.downcase.to_sym
   when :login           then Bushido::User.reauth
+  when :api_key         then Bushido::User.show_api_key
   when :remove_account  then Bushido::User.clear_config
+
   when :claim           then Bushido::App.claim(ARGV[1])
   when :list            then Bushido::App.list()
   when :create          then Bushido::App.create(ARGV[1])
@@ -59,6 +65,16 @@ if command
   when :restart         then Bushido::App.restart(ARGV[1])
   when :update          then Bushido::App.update(ARGV[1])
   when :open            then Bushido::App.open(ARGV[1])
+
+  when :add_domain      then Bushido::App.add_domain(ARGV[1], ARGV[2])
+  when :remove_domain   then Bushido::App.remove_domain(ARGV[1])
+  when :add_var         then Bushido::App.add_var(ARGV[1], ARGV[2], ARGV[3])
+  when :remove_var      then Bushido::App.remove_var(ARGV[1], ARGV[2])
+  when :clear_logs      then Bushido::App.clear_logs(ARGV[1])
+  when :logs            then Bushido::App.logs(ARGV[1])
+  else
+    puts "I don't know how to '#{command}'"
+    puts "I do know how to do these though: #{commands.join(', ')}"
   end
 else
   puts "usage: bushido <command>\n\nSee bushido -h for more detailed instructions"

@@ -75,6 +75,10 @@ module Bushido
         end
       end
 
+      def show_api_key
+        puts "#{account['authentication_token']}"
+      end
+
       def authentication_token
         account["authentication_token"]
       end

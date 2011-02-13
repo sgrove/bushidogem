@@ -28,9 +28,9 @@ module Bushido
         Bushido::Command.get_command(url, params)
       end
 
-      def put(app, command)
+      def put(app, command, params={})
         url = "#{Temple}/apps/#{app}.json"
-        params = {:command => command}
+        params[:command] = command
 
         Bushido::Command.show_response Bushido::Command.put_command(url, params)
       end
@@ -63,6 +63,30 @@ module Bushido
 
       def update(name)
         put name, :update
+      end
+
+      def add_var(name, key, value)
+        puts put(name, :add_var, {:key => key, :value => value})
+      end
+
+      def remove_var(name, key)
+        puts put(name, :remove_var, {:key => key})
+      end
+
+      def add_domain(name, domain)
+        puts put(name, :add_domain, {:domain => domain})
+      end
+
+      def remove_domain(name)
+        puts put(name, :remove_domain)
+      end
+
+      def clear_logs(name)
+        puts put(name, :clear_logs)
+      end
+
+      def logs(name)
+        puts get(name, {:gift => "logs"})
       end
     end
   end
