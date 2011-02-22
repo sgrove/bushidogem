@@ -88,6 +88,10 @@ module Bushido
       def logs(name)
         puts get(name, {:gift => "logs"})
       end
+
+      def ssh_key(name)
+        puts get(name, {:gift => "ssh_key"})["ssh_key"]
+      end
     end
   end
 end

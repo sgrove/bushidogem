@@ -10,5 +10,6 @@ module Bushido
   require "bushido/command"
   require "bushido/app"
 
-  Temple = ENV["HOST"] || "http://nok.tea.sh/"
+  host = ENV["HOST"] || "bushi.do"
+  Temple = "http://#{host}/"
 end

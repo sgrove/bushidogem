@@ -3,7 +3,7 @@ require 'bushido'
 
 options = {}
 
-commands = [:login, :remove_account, :claim,  :list, :create, :show, :start, :stop, :restart, :update, :open, :logs, :add_var, :remove_var, :api_key].sort
+commands = [:login, :remove_account, :claim,  :list, :create, :show, :start, :stop, :restart, :update, :open, :logs, :add_var, :remove_var, :ssh_key, :api_key].sort
 
 help_docs = {
   :login => "bushido login - Authorizes this machine to work under your Bushido account",
@@ -20,6 +20,7 @@ help_docs = {
   :open => "bushido open [NAME] - Open browser window to the running Bushido app",
   :create => "bushido create [NAME] - Creates a new app",
   :logs => "bushido logs [NAME] - Retrieves all of the logs for an app and returns them in a JSON structure",
+  :ssh_key => "bushido ssh_key [NAME] - Retrieves ssh_key for NAME, only needed for private repos (e.g. on github)",
   :add_var => "bushido add_var [NAME] [KEY] [VALUE] - Adds an environmental variable for an app to use",
   :remove_var => "bushido remove_var [NAME] [KEY] - Removes an existing environmental variable from an app"
 }
@@ -72,6 +73,7 @@ if command
   when :remove_var      then Bushido::App.remove_var(ARGV[1], ARGV[2])
   when :clear_logs      then Bushido::App.clear_logs(ARGV[1])
   when :logs            then Bushido::App.logs(ARGV[1])
+  when :ssh_key         then Bushido::App.ssh_key(ARGV[1])
   else
     puts "I don't know how to '#{command}'"
     puts "I do know how to do these though: #{commands.join(', ')}"
