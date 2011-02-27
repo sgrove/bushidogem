@@ -1,5 +1,10 @@
 #!/usr/bin/env ruby
-require 'bushido'
+begin
+  require 'bushido'
+rescue LoadError
+  $: << File.expand_path("../../lib", __FILE__)
+  require 'bushido'
+end
 
 options = {}
 
