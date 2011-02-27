@@ -8,7 +8,7 @@ end
 
 options = {}
 
-commands = [:login, :remove_account, :claim,  :list, :create, :show, :start, :stop, :restart, :update, :open, :logs, :add_var, :remove_var, :ssh_key, :api_key].sort
+commands = [:login, :remove_account, :claim,  :list, :create, :show, :start, :stop, :restart, :update, :open, :logs, :add_var, :remove_var, :ssh_key, :api_key].sort_by {|s| s.to_s}
 
 help_docs = {
   :login => "bushido login - Authorizes this machine to work under your Bushido account",
