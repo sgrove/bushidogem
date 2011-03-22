@@ -1,97 +1,92 @@
 module Bushido
   class App
     class << self
-      def create(url)
-        Bushido::User.load_account
-
-        puts "Creating from #{url} for #{Bushido::User.email}..."
-
-        post({:app => {:url => url}})
+      def app_url
+        "#{Bushido::Platform.host}/apps/#{Bushido::Platform.app}.json"
       end
 
-      def list
-        response = Bushido::Command.get_command("#{Temple}/apps")
 
-        response.each do |app|
-          puts app["app"]['subdomain']
-        end
+      def get(params={})
+        Bushido::Command.get_command(app_url, params)
       end
 
-      def open(name)
-        location = "http://#{name}.#{Bushido::Temple.gsub('http://','')}"
-        puts "Opening \"#{location}\" ..."
-        exec "open #{location}"
-      end
 
-      def get(name, params={})
-        url = "#{Temple}/apps/#{name}"
-        Bushido::Command.get_command(url, params)
-      end
-
-      def put(app, command, params={})
-        url = "#{Temple}/apps/#{app}.json"
+      def put(command, params={})
         params[:command] = command
 
-        Bushido::Command.show_response Bushido::Command.put_command(url, params)
+        Bushido::Command.put_command(app_url, params)
       end
 
-      def post(params)
-        url = "#{Temple}/apps"
-        Bushido::Command.show_response Bushido::Command.post_command(url, params)
+
+      def show
+        result = get
       end
 
-      def show(name)
-        result = get name
-        puts result.inspect
+
+      def start
+        put :start
       end
 
-      def start(name)
-        put name, :start
+
+      def stop
+        put :stop
       end
 
-      def stop(name)
-        put name, :stop
+
+      def restart
+        put :restart
       end
 
-      def restart(name)
-        put name, :restart
+
+      def claim
+        put :claim
       end
 
-      def claim(name)
-        put name, :claim
+
+      def update
+        put :update
       end
 
-      def update(name)
-        put name, :update
+
+      def add_var(key, value)
+        put :add_var, {:key => key, :value => value}
       end
 
-      def add_var(name, key, value)
-        puts put(name, :add_var, {:key => key, :value => value})
+
+      def remove_var(key)
+        put :remove_var, {:key => key}
       end
 
-      def remove_var(name, key)
-        puts put(name, :remove_var, {:key => key})
+
+      def set_subdomain(subdomain)
+        put :set_subdomain, {:subdomain => subdomain}
       end
 
-      def add_domain(name, domain)
-        puts put(name, :add_domain, {:domain => domain})
+
+      def add_domain(domain)
+        put :add_domain, {:domain => domain}
       end
 
-      def remove_domain(name)
-        puts put(name, :remove_domain)
+
+      def remove_domain
+        put :remove_domain
       end
 
-      def clear_logs(name)
-        puts put(name, :clear_logs)
+
+      def clear_logs
+        put :clear_logs
       end
 
-      def logs(name)
-        puts get(name, {:gift => "logs"})
+
+      def logs
+        get({:gift => "logs"})
       end
 
-      def ssh_key(name)
-        puts get(name, {:gift => "ssh_key"})["ssh_key"]
+
+      def ssh_key
+        get({:gift => "ssh_key"})["ssh_key"]
       end
     end
   end
 end
+

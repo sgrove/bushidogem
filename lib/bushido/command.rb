@@ -1,18 +1,20 @@
 module Bushido
   class Command
+    @@last_request = nil
+
     class << self
       def get_command(url, params={})
         params.merge!({:auth_token => Bushido::Platform.key}) if params[:auth_token].nil? unless Bushido::Platform.key.nil?
 
         raw = RestClient.get(url, {:params => params, :accept => :json})
-        response = JSON.parse raw    
+        @@last_request = JSON.parse raw    
       end
 
       def post_command(url, params)
         params.merge!({:auth_token => Bushido::Platform.key}) if params[:auth_token].nil? unless Bushido::Platform.key.nil?
 
         raw = RestClient.post(url, params.to_json, :content_type => :json, :accept => :json)
-        response = JSON.parse raw    
+        @@last_request = JSON.parse raw    
       end
 
       def put_command(url, params, meta={})
@@ -20,15 +22,13 @@ module Bushido
           params.merge!({:auth_token => Bushido::Platform.key}) if params[:auth_token].nil? unless Bushido::Platform.key.nil?
 
           raw = RestClient.put(url, params.to_json,  :content_type => :json)
-          response = JSON.parse raw
+          @@last_request = JSON.parse raw
 
         else
-          Bushido::Utils.while_authorized do
-            params.merge!({:auth_token => Bushido::Platform.key}) if params[:auth_token].nil? unless Bushido::Platform.key.nil?
+          params.merge!({:auth_token => Bushido::Platform.key}) if params[:auth_token].nil? unless Bushido::Platform.key.nil?
 
-            raw = RestClient.put(url, params.to_json,  :content_type => :json)
-            response = JSON.parse raw
-          end
+          raw = RestClient.put(url, params.to_json,  :content_type => :json)
+          @@last_request = JSON.parse raw
         end
       end
 
@@ -53,6 +53,14 @@ module Bushido
             puts "\t#{counter + 1}. #{error}"
           end
         end
+      end
+
+      def last_command_successful?
+        @@last_request.nil? or @@last_request["errors"].nil?
+      end
+
+      def last_command_errored?
+        not last_command_successful?
       end
     end
   end
