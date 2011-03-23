@@ -58,6 +58,16 @@ module Bushido
       end
 
 
+      def domains
+        get()["app"]["domains"]
+      end
+
+
+      def subdomain
+        get()["app"]["subdomain"]
+      end
+
+
       def set_subdomain(subdomain)
         put :set_subdomain, {:subdomain => subdomain}
       end
@@ -68,8 +78,8 @@ module Bushido
       end
 
 
-      def remove_domain
-        put :remove_domain
+      def remove_domain(domain)
+        put :remove_domain, {:domain => domain}
       end
 
 

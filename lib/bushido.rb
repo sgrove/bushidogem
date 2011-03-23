@@ -6,7 +6,6 @@ module Bushido
   require 'highline/import'
 
   require "bushido/platform"
-  require "bushido/dns"
   require "bushido/utils"
   require "bushido/command"
   require "bushido/app"

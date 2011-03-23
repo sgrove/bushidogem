@@ -1,16 +1,23 @@
 module Bushido
   class Command
-    @@last_request = nil
+    @@last_request  = nil
+    @@request_count = 0
 
     class << self
+      def request_count
+        @@request_count
+      end
+
       def get_command(url, params={})
+        @@request_count += 1
         params.merge!({:auth_token => Bushido::Platform.key}) if params[:auth_token].nil? unless Bushido::Platform.key.nil?
 
         raw = RestClient.get(url, {:params => params, :accept => :json})
-        @@last_request = JSON.parse raw    
+        @@last_request = JSON.parse raw
       end
 
       def post_command(url, params)
+        @@request_count += 1
         params.merge!({:auth_token => Bushido::Platform.key}) if params[:auth_token].nil? unless Bushido::Platform.key.nil?
 
         raw = RestClient.post(url, params.to_json, :content_type => :json, :accept => :json)
@@ -18,6 +25,7 @@ module Bushido
       end
 
       def put_command(url, params, meta={})
+        @@request_count += 1
         if meta[:force]
           params.merge!({:auth_token => Bushido::Platform.key}) if params[:auth_token].nil? unless Bushido::Platform.key.nil?
 
