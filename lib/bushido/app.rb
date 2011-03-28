@@ -68,6 +68,15 @@ module Bushido
       end
 
 
+      def subdomain_available?(subdomain)
+        begin
+          return put :subdomain_available?, {:subdomain => subdomain}
+        rescue RestClient::UnprocessableEntity
+          return false
+        end
+      end
+
+
       def set_subdomain(subdomain)
         put :set_subdomain, {:subdomain => subdomain}
       end
@@ -83,11 +92,12 @@ module Bushido
       end
 
 
-      def clear_logs
-        put :clear_logs
+      def clear_log!(name)
+        put :clear_log!, {:name => name}
       end
 
 
+      # TODO: Update to use the new logs controller
       def logs
         get({:gift => "logs"})
       end
@@ -99,4 +109,3 @@ module Bushido
     end
   end
 end
-
