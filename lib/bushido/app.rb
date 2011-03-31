@@ -50,11 +50,17 @@ module Bushido
 
       def add_var(key, value)
         put :add_var, {:key => key, :value => value}
+        if Bushido::Command.last_command_successful?
+          ENV[key.upcase] = value
+        end
       end
 
 
       def remove_var(key)
         put :remove_var, {:key => key}
+        if Bushido::Command.last_command_successful?
+          ENV[key.upcase] = nil
+        end
       end
 
 
