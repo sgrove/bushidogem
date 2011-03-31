@@ -78,17 +78,24 @@ module Bushido
 
 
       def set_subdomain(subdomain)
-        put :set_subdomain, {:subdomain => subdomain}
+        result = put :set_subdomain!, {:subdomain => subdomain}
+        if Bushido::Command.last_command_successful?
+          ENV["BUSHIDO_SUBDOMAIN"] = subdomain
+          ENV["PUBLIC_URL"] = "http://#{subdomain}.#{ENV['APP_TLD']}/"
+          return result
+        end
+
+        result
       end
 
 
       def add_domain(domain)
-        put :add_domain, {:domain => domain}
+        put :add_domain!, {:domain => domain}
       end
 
 
       def remove_domain(domain)
-        put :remove_domain, {:domain => domain}
+        put :remove_domain!, {:domain => domain}
       end
 
 

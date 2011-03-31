@@ -2,6 +2,7 @@ module Bushido
   class Command
     @@last_request  = nil
     @@request_count = 0
+    @@last_request_successful = true
 
     class << self
       def request_count
@@ -12,7 +13,15 @@ module Bushido
         @@request_count += 1
         params.merge!({:auth_token => Bushido::Platform.key}) if params[:auth_token].nil? unless Bushido::Platform.key.nil?
 
-        raw = RestClient.get(url, {:params => params, :accept => :json})
+        begin
+          raw = RestClient.get(url, {:params => params, :accept => :json})
+        rescue => e
+          puts e.inspect
+          @@last_request_successful = false
+          return nil
+        end
+
+        @@last_request_successful = true
         @@last_request = JSON.parse raw
       end
 
@@ -20,7 +29,15 @@ module Bushido
         @@request_count += 1
         params.merge!({:auth_token => Bushido::Platform.key}) if params[:auth_token].nil? unless Bushido::Platform.key.nil?
 
-        raw = RestClient.post(url, params.to_json, :content_type => :json, :accept => :json)
+        begin
+          raw = RestClient.post(url, params.to_json, :content_type => :json, :accept => :json)
+        rescue => e
+          puts e.inspect
+          @@last_request_successful = false
+          return nil
+        end
+
+        @@last_request_successful = true
         @@last_request = JSON.parse raw    
       end
 
@@ -29,13 +46,29 @@ module Bushido
         if meta[:force]
           params.merge!({:auth_token => Bushido::Platform.key}) if params[:auth_token].nil? unless Bushido::Platform.key.nil?
 
-          raw = RestClient.put(url, params.to_json,  :content_type => :json)
+          begin
+            raw = RestClient.put(url, params.to_json,  :content_type => :json)
+          rescue => e
+            puts e.inspect
+            @@last_request_successful = false
+            return nil
+          end
+
+          @@last_request_successful = true
           @@last_request = JSON.parse raw
 
         else
           params.merge!({:auth_token => Bushido::Platform.key}) if params[:auth_token].nil? unless Bushido::Platform.key.nil?
 
-          raw = RestClient.put(url, params.to_json,  :content_type => :json)
+          begin
+            raw = RestClient.put(url, params.to_json,  :content_type => :json)
+          rescue => e
+            puts e.inspect
+            @@last_request_successful = false
+            return nil
+          end
+
+          @@last_request_successful = true
           @@last_request = JSON.parse raw
         end
       end
@@ -64,7 +97,7 @@ module Bushido
       end
 
       def last_command_successful?
-        @@last_request.nil? or @@last_request["errors"].nil?
+        @@last_request_successful
       end
 
       def last_command_errored?

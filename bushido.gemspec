@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.email       = ["s@bushi.do"]
   s.homepage    = "http://gem.bushi.do"
   s.summary     = %q{Command-lin interface for bushi.do}
-  s.description = %q{A command line tool to do everything with bushido, from signing up and deploying new apps, to claiming, restarting, and updating existing apps}
+  s.description = %q{A module for a Bushido app to manipulate everything about itself while running on Bushido, from deploying new apps, to claiming, restarting, updating existing apps, changing public domain, subdomains, etc.}
 
   s.add_dependency "rest-client", ">=1.6.1"
   s.add_dependency "json",        ">=1.4.6"
