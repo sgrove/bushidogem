@@ -7,7 +7,7 @@ module Bushido
       end
 
 
-      # Checkswhether user an email and password correspond to a valid bushido
+      # Checks whether user an email and password correspond to a valid bushido
       # user. Returns nil if false, or the Bushido user's ID if true.
       def valid?(email, pass)
         params = {}
