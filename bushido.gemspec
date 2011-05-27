@@ -8,8 +8,8 @@ Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Sean Grove"]
   s.email       = ["s@bushi.do"]
-  s.homepage    = "http://gem.bushi.do"
-  s.summary     = %q{Command-lin interface for bushi.do}
+  s.homepage    = "https://github.com/sgrove/bushidogem"
+  s.summary     = %q{Command-line interface for bushi.do}
   s.description = %q{A module for a Bushido app to manipulate everything about itself while running on Bushido, from deploying new apps, to claiming, restarting, updating existing apps, changing public domain, subdomains, etc.}
 
   s.add_dependency "rest-client", ">=1.6.1"
