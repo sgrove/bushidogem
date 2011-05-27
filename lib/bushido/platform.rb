@@ -1,5 +1,5 @@
 module Bushido
-  class Platform
+  class Platform #:nodoc:
     class << self
       def app
         ENV['BUSHIDO_APP']

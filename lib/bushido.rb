@@ -1,4 +1,4 @@
-module Bushido
+module Bushido #:nodoc:
   require 'rubygems'
   require 'optparse'
   require 'rest-client'

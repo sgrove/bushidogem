@@ -1,5 +1,5 @@
 module Bushido
-  class Command
+  class Command #:nodoc:
     @@last_request  = nil
     @@request_count = 0
     @@last_request_successful = true

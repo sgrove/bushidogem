@@ -1,6 +1,6 @@
 require 'test/unit'
 
-class TestExecutable < Test::Unit::TestCase
+class TestExecutable < Test::Unit::TestCase #:nodoc:
   EXECUTABLE = 
   def test_complains_with_no_args
     output = %x{#{File.expand_path('../../bin/bushido', __FILE__)}}
