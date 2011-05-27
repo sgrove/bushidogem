@@ -3,7 +3,7 @@ module Bushido
   class User
     class << self
       def unity_url #:nodoc:
-        "#{Bushido::Platform.host}/connect/v1"
+        "#{Bushido::Platform.host}/unity/v1"
       end
 
 
