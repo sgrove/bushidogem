@@ -9,4 +9,5 @@ module Bushido #:nodoc:
   require "bushido/utils"
   require "bushido/command"
   require "bushido/app"
+  require "bushido/user"
 end
