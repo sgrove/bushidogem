@@ -10,4 +10,5 @@ module Bushido #:nodoc:
   require "bushido/app"
   require "bushido/user"
   require "bushido/event"
+  require "bushido/version"
 end
