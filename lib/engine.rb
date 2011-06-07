@@ -1,7 +1,5 @@
 require 'bushido'
 require 'rails'
-require 'action_controller'
-require 'application_helper'
 
 module Bushido
   class Engine < Rails::Engine

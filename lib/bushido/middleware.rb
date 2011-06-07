@@ -12,7 +12,7 @@ module Bushido
       @app = app
       @bushido_app_name       = ENV['BUSHIDO_APP']
       @bushido_metrics_token  = ENV['BUSHIDO_METRICS_TOKEN']
-      @bushido_claimed        = ::Locomotive.bushido_app_claimed?
+      @bushido_claimed        = false
     end
 
     def call(env)
