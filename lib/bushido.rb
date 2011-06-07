@@ -1,5 +1,4 @@
 module Bushido #:nodoc:
-  require 'rubygems'
   require 'optparse'
   require 'rest-client'
   require 'json'
@@ -10,4 +9,6 @@ module Bushido #:nodoc:
   require "bushido/command"
   require "bushido/app"
   require "bushido/user"
+  require "bushido/event"
+  require "bushido/version"
 end

@@ -5,7 +5,7 @@ module Bushido
   class App
     class << self
       def app_url #:nodoc:
-        "#{Bushido::Platform.host}/apps/#{Bushido::Platform.app}.json"
+        "#{Bushido::Platform.host}/apps/#{Bushido::Platform.name}.json"
       end
 
 
