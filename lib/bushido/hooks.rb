@@ -4,15 +4,15 @@ module Bushido
     @@hooks = {}
     
     class << self
-      def fire *hooks
+      def fire *hooks, data
         unless @@hooks[:global].nil?
-          @@hooks[:global].call('global')
+          @@hooks[:global].call('global', data)
         end
         
         if hooks.length > 0
           hooks.each do |h|          
             unless @@hooks[h].nil? 
-              @@hooks[h].call(h)
+              @@hooks[h].call(h, data)
             end
           end
         end
