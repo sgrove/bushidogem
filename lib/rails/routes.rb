@@ -4,7 +4,7 @@ module ActionDispatch::Routing
       def bushido_routes
         Rails.application.routes.draw do
           namespace 'bushido' do
-            resources :envs, :only => [ :update, :show ]
+            resources :envs, :only => [ :update ]
           end
         end
       end
