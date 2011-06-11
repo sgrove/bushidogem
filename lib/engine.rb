@@ -1,5 +1,6 @@
 require 'bushido'
 require 'rails'
+require 'rails/routes'
 
 module Bushido
   class Engine < Rails::Engine
