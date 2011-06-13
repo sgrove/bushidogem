@@ -28,8 +28,8 @@ module Bushido
         end
       end
       
-      def publish
-        RestClient.post(url, params.to_json, :content_type => :json, :accept => :json)
+      def publish(model)
+        RestClient.post(Bushido::Platform.host, model.to_json, :content_type => :json, :accept => :json)
       end
       
     end
