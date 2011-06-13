@@ -12,6 +12,7 @@ module Bushido #:nodoc:
   require "bushido/user"
   require "bushido/event"
   require "bushido/version"
-  require "bushido/hooks"
+  require "bushido/envs"
+  require "bushido/data"
   require "bushido/middleware"
 end

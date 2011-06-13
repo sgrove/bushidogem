@@ -5,6 +5,7 @@ module ActionDispatch::Routing
         Rails.application.routes.draw do
           namespace 'bushido' do
             resources :envs, :only => [ :update ]
+            match '/data' => "data#index"
           end
         end
       end

@@ -1,5 +1,5 @@
 module Bushido
-  class Hooks #:nodoc:
+  class Data #:nodoc:
     
     @@hooks = {}
     
@@ -26,6 +26,10 @@ module Bushido
             @@hooks[h] = block
           end
         end
+      end
+      
+      def publish
+        RestClient.post(url, params.to_json, :content_type => :json, :accept => :json)
       end
       
     end
