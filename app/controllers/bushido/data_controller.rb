@@ -14,7 +14,7 @@ module Bushido
         puts params.inspect
         Bushido::Data.fire(params)
         respond_to do |format|
-          format.json {render :json =>{'acknowledged' : true} :status => 200}
+          format.json {render :json =>{'acknowledged' => true} :status => 200}
         end
       end
     end
