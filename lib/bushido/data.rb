@@ -29,6 +29,8 @@ module Bushido
       end
       
       def publish(model)
+        puts "bushido publishing model"
+        puts Bushido::Platform.host
         RestClient.post(Bushido::Platform.host, model.to_json, :content_type => :json, :accept => :json)
       end
       
