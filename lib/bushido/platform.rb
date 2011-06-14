@@ -9,6 +9,10 @@ module Bushido
       def key
         ENV['BUSHIDO_APP_KEY']
       end
+      
+      def publish_url
+        host+"/apps/"+name+"/bus"
+      end
 
 
       def host
