@@ -4,7 +4,7 @@ module Bushido
     @@hooks = {}
     
     class << self
-      def fire *hooks, data
+      def fire data, *hooks
         unless @@hooks[:global].nil?
           @@hooks[:global].call('global', data)
         end
@@ -28,17 +28,18 @@ module Bushido
         end
       end
       
-      def publish(model, data)
-        data[:model] = model
+      # POST /apps/:id/bus
+      def publish(model, model_data)
+        data = {}
         data[:key] = Bushido::Platform.key
-        # POST /apps/:id/bus
-        puts "bushido publishing model"
+
+        data["data"]  = model_data
+        data["data"]["bushido_model"] = model
+        puts "Publishing bushido model"
         puts data.to_json
         puts Bushido::Platform.publish_url
         RestClient.post(Bushido::Platform.publish_url, data.to_json, :content_type => :json, :accept => :json)
       end
-      
     end
-    
   end
 end

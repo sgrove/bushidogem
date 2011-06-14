@@ -11,9 +11,8 @@ module Bushido
       end
       
       def publish_url
-        host+"/apps/"+name+"/bus"
+        "#{host}/apps/#{name}/bus"
       end
-
 
       def host
         port = ENV['BUSHIDO_PORT'] ? ":#{ENV['BUSHIDO_PORT']}" : ""
