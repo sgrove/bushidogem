@@ -1,8 +1,8 @@
 module Bushido
   class Data #:nodoc:
     
-    @@hooks = {}
-    
+    extend Hooks
+
     class << self
       def fire data, *hooks
         unless @@hooks[:global].nil?
@@ -38,7 +38,12 @@ module Bushido
         puts "Publishing bushido model"
         puts data.to_json
         puts Bushido::Platform.publish_url
-        RestClient.post(Bushido::Platform.publish_url, data.to_json, :content_type => :json, :accept => :json)
+
+        # TODO: Catch non-200 response code
+        response = JSON.parse(RestClient.post(Bushido::Platform.publish_url, data.to_json, :content_type => :json, :accept => :json))
+        if response['data_id'].nil? or response['data_version'].nil?
+          return false
+        end
       end
     end
   end
