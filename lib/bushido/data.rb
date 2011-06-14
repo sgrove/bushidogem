@@ -7,11 +7,10 @@ module Bushido
       def publish(model, data)
         data[:model] = model
         data[:key] = Bushido::Platform.key
-        # POST /apps/:id/bus
-        puts "bushido publishing model"
-        puts data.to_json
-        puts Bushido::Platform.publish_url
-        RestClient.post(Bushido::Platform.publish_url, data.to_json, :content_type => :json, :accept => :json)
+        response = JSON.parse(RestClient.post(Bushido::Platform.publish_url, data.to_json, :content_type => :json, :accept => :json))
+        if response['data_id'].nil? or response['data_version'].nil?
+          return false
+        end
       end
     end
     
