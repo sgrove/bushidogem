@@ -14,7 +14,6 @@ module Bushido
         "#{host}/apps/#{name}/bus"
       end
 
-
       def host
         port = ENV['BUSHIDO_PORT'] ? ":#{ENV['BUSHIDO_PORT']}" : ""
         "http://#{ENV['BUSHIDO_HOST'] || 'bushi.do'}#{port}"
