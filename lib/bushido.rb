@@ -7,6 +7,7 @@ module Bushido #:nodoc:
     
   require 'engine' if defined?(Rails) && Rails::VERSION::MAJOR == 3
   
+  require "rails/routes"
   require "bushido/hooks"
   require "bushido/platform"
   require "bushido/utils"
