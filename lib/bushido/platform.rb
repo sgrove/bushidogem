@@ -11,7 +11,7 @@ module Bushido
       end
       
       def publish_url
-        host+"/apps/"+name+"/bus"
+        "#{host}/apps/#{name}/bus"
       end
 
 

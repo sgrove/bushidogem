@@ -13,7 +13,7 @@ module Bushido
         
         puts "OMG GOT DATA FROM BUSHIBUS"
         puts params.inspect
-        Bushido::Data.fire('global', params)
+        Bushido::Data.fire(params)
         respond_to do |format|
           format.json {render :json => {'acknowledged' => true}, :status => 200}
         end

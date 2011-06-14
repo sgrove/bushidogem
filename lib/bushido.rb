@@ -4,7 +4,10 @@ module Bushido #:nodoc:
   require 'json'
   require 'highline/import'
   
+    
   require 'engine' if defined?(Rails) && Rails::VERSION::MAJOR == 3
+  
+  require "bushido/hooks"
   require "bushido/platform"
   require "bushido/utils"
   require "bushido/command"
