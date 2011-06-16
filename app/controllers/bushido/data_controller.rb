@@ -3,7 +3,7 @@ module Bushido
    
    puts caller.each{|c| p c }
    
-    # PUT /bushido/data/
+    # POST /bushido/data/
     def index
       @key = params.delete(:key)
       if ENV["BUSHIDO_APP_KEY"] != @key

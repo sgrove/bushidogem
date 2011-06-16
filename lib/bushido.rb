@@ -3,7 +3,7 @@ module Bushido #:nodoc:
   require 'rest-client'
   require 'json'
   require 'highline/import'
-  
+  require 'orm_adapter'
     
   require 'engine' if defined?(Rails) && Rails::VERSION::MAJOR == 3
   
