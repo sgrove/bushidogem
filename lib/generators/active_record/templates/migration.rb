@@ -1,4 +1,4 @@
-class bushidoCreate<%= table_name.camelize %> < ActiveRecord::Migration
+class BushidoCreate<%= table_name.camelize %> < ActiveRecord::Migration
   def self.up
     create_table(:<%= table_name %>) do |t|
       t.string :bushido_id

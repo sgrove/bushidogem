@@ -16,7 +16,7 @@ module Bushido
         
         puts "OMG GOT DATA FROM BUSHIBUS"
         puts params.inspect
-        Bushido::Data.fire(params)
+        Bushido::Data.fire(params, params[:category])
         respond_to do |format|
           format.json {render :json => {'acknowledged' => true}, :status => 200}
         end
