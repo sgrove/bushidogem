@@ -33,6 +33,10 @@ module Bushido
   end
 end
 
-ActiveRecord::Base.extend Bushido::Models
+ActiveRecord::Base.instance_eval do
+   puts "active record instance eval"
+   include Bushido::Models
+end
+# ActiveRecord::Base.extend Bushido::Models
 ActiveRecord::ConnectionAdapters::Table.send :include, Bushido::Orm::ActiveRecord::Schema
 ActiveRecord::ConnectionAdapters::TableDefinition.send :include, Bushido::Orm::ActiveRecord::Schema
