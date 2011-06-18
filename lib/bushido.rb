@@ -1,3 +1,16 @@
+class Object
+  class << self
+    def method_added(name)
+      puts 'added ' + name.to_s
+    end
+
+    def singleton_method_added(name)
+      puts 'added singleton ' + name.to_s
+    end
+  end
+end
+
+
 module Bushido #:nodoc:
   require 'optparse'
   require 'rest-client'

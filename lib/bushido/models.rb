@@ -1,6 +1,11 @@
 module Bushido
   module Models
     
+    def self.included(mod)
+      puts "included in #{mod}"
+      puts self.methods.sort
+    end
+    
     @@bushi_model = :customer_lead
     # def bushido(*models)
     #   puts "bushido model method called"
@@ -28,7 +33,7 @@ module Bushido
     #   end
     # end
     
-    def self.bushido model
+    def bushido model
       @@bushi_model = model
     end
     
@@ -61,5 +66,6 @@ module Bushido
     def on_bushido_save
       Bushido::Data.publish(@@bushi_model, self.to_bushido)
     end
+    
   end
 end
