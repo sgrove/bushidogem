@@ -1,11 +1,6 @@
 module Bushido
   module Models
     
-    def self.included(mod)
-      puts "included in #{mod}"
-      puts self.methods.sort
-    end
-    
     @@bushi_model = :customer_lead
     # def bushido(*models)
     #   puts "bushido model method called"
