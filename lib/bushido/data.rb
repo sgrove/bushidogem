@@ -20,6 +20,8 @@ module Bushido
         if response['data_id'].nil? or response['data_version'].nil?
           return false
         end
+
+        return response
       end
     end
   end

@@ -1,8 +1,6 @@
 module Bushido
   class DataController < ApplicationController
-   
-   puts caller.each{|c| p c }
-   
+      
     # POST /bushido/data/
     def index
       @key = params.delete(:key)

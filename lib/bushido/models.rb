@@ -26,7 +26,12 @@ module Bushido
           return Bushido::Data.publish(m, self)
         end
         
-      end 
+      end
+      
+    def very_cool_instance_method?
+      puts "very cool"
+      puts self
+    end 
        
     end
   end
