@@ -3,3 +3,4 @@ module Bushido
     extend Hooks
   end
 end
+
