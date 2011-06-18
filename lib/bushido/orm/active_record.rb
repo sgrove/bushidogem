@@ -42,3 +42,4 @@ end
 ActiveRecord::Base.send :include, Bushido::Models
 ActiveRecord::ConnectionAdapters::Table.send :include, Bushido::Orm::ActiveRecord::Schema
 ActiveRecord::ConnectionAdapters::TableDefinition.send :include, Bushido::Orm::ActiveRecord::Schema
+
