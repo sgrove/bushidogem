@@ -3,7 +3,7 @@ module Bushido #:nodoc:
   require 'rest-client'
   require 'json'
   require 'highline/import'
-  
+  require 'orm_adapter'
     
   require 'engine' if defined?(Rails) && Rails::VERSION::MAJOR == 3
   
@@ -19,4 +19,12 @@ module Bushido #:nodoc:
   require "bushido/envs"
   require "bushido/data"
   require "bushido/middleware"
+  require "bushido/models"
+  require "bushido/schema"
+  
+  # Default way to setup Devise. Run rails generate devise_install to create
+  # a fresh initializer with all configuration values.
+  def self.setup
+    yield self
+  end
 end

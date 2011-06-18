@@ -3,14 +3,18 @@ module Hooks
   @@hooks = {}
   
     def fire(data, *hooks)
+      puts "bushido frining hook"
+      puts data.inspect
+      puts hooks.inspect
+      puts @@hooks.inspect
       unless @@hooks[:global].nil?
         @@hooks[:global].call(data, 'global')
       end
       
       if hooks.length > 0
-        hooks.each do |h|          
-          unless @@hooks[h].nil? 
-            @@hooks[h].call(data, hook)
+        hooks.each do |h|
+          unless @@hooks[h.to_sym].nil? 
+            @@hooks[h.to_sym].call(data, h)
           end
         end
       end

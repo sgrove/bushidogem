@@ -1,6 +1,7 @@
 module Bushido
   class DataController < ApplicationController
-    # PUT /bushido/data/
+      
+    # POST /bushido/data/
     def index
       @key = params.delete(:key)
       if ENV["BUSHIDO_APP_KEY"] != @key
@@ -11,10 +12,13 @@ module Bushido
         end
       end
         
-      Bushido::Data.fire(params)
-      respond_to do |format|
-        format.json {render :json => {'acknowledged' => true}, :status => 200}
-      end
+        puts "OMG GOT DATA FROM BUSHIBUS"
+        puts params.inspect
+        puts params[:category].inspect
+        Bushido::Data.fire(params, params[:category])
+        respond_to do |format|
+          format.json {render :json => {'acknowledged' => true}, :status => 200}
+        end
     end
   end
 end
