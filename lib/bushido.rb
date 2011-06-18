@@ -1,3 +1,16 @@
+class Object
+  class << self
+    def method_added(name)
+      puts 'added ' + name.to_s
+    end
+
+    def singleton_method_added(name)
+      puts 'added singleton ' + name.to_s
+    end
+  end
+end
+
+
 module Bushido #:nodoc:
   require 'optparse'
   require 'rest-client'
@@ -22,7 +35,7 @@ module Bushido #:nodoc:
   require "bushido/models"
   require "bushido/schema"
   
-  # Default way to setup Devise. Run rails generate devise_install to create
+  # Default way to setup Bushido. Run rails generate bushido_install to create
   # a fresh initializer with all configuration values.
   def self.setup
     yield self
