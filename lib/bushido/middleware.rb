@@ -17,28 +17,32 @@ module Bushido
 
     def call(env)
       status, headers, response = @app.call(env)
+      
+      puts 'lol middle ware'
+      puts @bushido_app_name.inspect
+      
+      unless @bushido_app_name.empty?
+        content = ""
+        response.each { |part| content += part }
 
-      content = ""
-      response.each { |part| content += part }
+        # "claiming" bar + stats ?
+        content.gsub!(/<\/head>/i, <<-STR
+            <script type="text/javascript">
+              var _bushido_app = '#{@bushido_app_name}';
+              var _bushido_claimed = #{@bushido_claimed.to_s};
+              var _bushido_metrics_token = '#{@bushido_metrics_token}';
+              (function() {
+                var bushido = document.createElement('script'); bushido.type = 'text/javascript'; bushido.async = true;
+                bushido.src = '#{BUSHIDO_JS_URL}?#{::Bushido::VERSION.gsub('.', '')}';
+                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(bushido, s);
+              })();
+            </script>     
+          </head>
+        STR
+        )
 
-      # "claiming" bar + stats ?
-      content.gsub!(/<\/body>/i, <<-STR
-          <script type="text/javascript">
-            var _bushido_app = '#{@bushido_app_name}';
-            var _bushido_claimed = #{@bushido_claimed.to_s};
-            var _bushido_metrics_token = '#{@bushido_metrics_token}';
-            (function() {
-              var bushido = document.createElement('script'); bushido.type = 'text/javascript'; bushido.async = true;
-              bushido.src = '#{BUSHIDO_JS_URL}?#{::Bushido::VERSION.gsub('.', '')}';
-              var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(bushido, s);
-            })();
-          </script>     
-        </body>
-      STR
-      )
-
-      headers['content-length'] = bytesize(content).to_s
-
+        headers['content-length'] = bytesize(content).to_s
+      end
       [status, headers, [content]]
     end
 
