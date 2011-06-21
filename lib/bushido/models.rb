@@ -1,66 +1,58 @@
 module Bushido
   module Models
-    
-    @@bushi_model = :customer_lead
-    # def bushido(*models)
-    #   puts "bushido model method called"
-    #   puts models.inspect
-    #   models.each do |m|
-    #     
-    #     puts "setting up bushido hooks for"
-    #     puts m
-    #     puts m.inspect
-    #     
-    #     Bushido::Data.listen(m) do |data, hook|
-    #       puts "this is code block for models"
-    #       puts m.inspect
-    #       puts data.inspect
-    #       puts hook.inspect
-    #       puts self.inspect
-    #       self.update_attributes(data)
-    #     end
-    #     
-    #     self.before_save do
-    #       puts "Bushido before save publish called"
-    #       return Bushido::Data.publish(m, self)
-    #     end
-    #     
-    #   end
-    # end
-    
-    def bushido model
-      @@bushi_model = model
+    def self.included(base)
+      base.extend ClassMethods
     end
-    
-    def to_bushido &block
-      yield block
+
+    def bushido_save
+      # It's possible we're saving an item just handed to us by Bushido, so we
+      # don't want to re-publish it. We can detect it using the version.
+
+      # bushido_id.nil? This is new, it's from us (otherwise bushido would have given it an id), we should publish it.
+      # bushido_version == self.find(self.id).bushido_version The version hasn't changed, our data has, we should publish it
+      puts "new_record? #{self.new_record?}"
+      puts "self.id = #{self.id}"
+      puts "ido_id.nil? #{ido_id.nil?}"
+      puts "ido_version == self.class.find(self.id).ido_version ? #{ido_version == self.class.find(self.id).ido_version}" unless self.new_record?
+      if self.ido_id.nil? or (not self.new_record? and self.ido_version == self.class.find(self.id).ido_version)
+        puts "Local change, publishing to Bushido databus"
+
+        data = self.to_bushido
+
+        begin
+          response = Bushido::Data.publish(self.class.class_variable_get("@@bushi_model"), data)
+        rescue => e
+          puts e.inspect
+          # TODO: Catch specific exceptions and bubble up errors (e.g. 'bushido is down', 'model is malformed', etc.)
+          return false
+        end
+
+        self.ido_version = response["ido_version"]
+        self.ido_id ||= response["ido_id"]
+
+        puts response.inspect
+      else
+        puts "Remote change, not publishing to Bushido databus"
+      end
+
+      return true
     end
-    
-    def from_bushido &block
-      yield block
-    end
-    
-    def on_bushido_update &block
-      Bushido::Data.listen("#{@@bushi_model}.#{update}") do |data, hook|
-        block.call(data, hook)
+
+    module ClassMethods
+      def bushido model
+        self.class_variable_set("@@bushi_model", model)
+
+        [:create, :update, :destroy].each do |event|
+          puts "Hooking into #{model}.#{event}..."
+
+          Bushido::Data.listen("#{model}.#{event}") do |data, hook|
+            puts "#{hook}.) Firing off #{model}.#{event} now with data: #{data}"
+            self.send("on_bushido_#{event}".to_sym, self.from_bushido(data))
+          end
+        end
+        
+        before_save :bushido_save
       end
     end
-    
-    def on_bushido_create
-      Bushido::Data.listen("#{@@bushi_model}.#{create}") do |data, hook|
-        block.call(data, hook)
-      end
-    end
-    
-    def on_bushido_destroy
-      Bushido::Data.listen("#{@@bushi_model}.#{destroy}") do |data, hook|
-        block.call(data, hook)
-      end
-    end
-    
-    def on_bushido_save
-      Bushido::Data.publish(@@bushi_model, self.to_bushido)
-    end
-    
   end
 end
