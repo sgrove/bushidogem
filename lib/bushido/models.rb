@@ -7,7 +7,8 @@ module Bushido
     def bushido_save
       # It's possible we're saving an item just handed to us by Bushido, so we
       # don't want to re-publish it. We can detect it using the version.
-
+      
+      puts "what"
       # bushido_id.nil? This is new, it's from us (otherwise bushido would have given it an id), we should publish it.
       # bushido_version == self.find(self.id).bushido_version The version hasn't changed, our data has, we should publish it
       puts "new_record? #{self.new_record?}"

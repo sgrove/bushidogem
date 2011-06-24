@@ -1,6 +1,6 @@
 module Bushido
   class Envs #:nodoc:
-    extend Hooks
+    extend Hooks 
   end
 end
 
