@@ -1,4 +1,4 @@
-require 'rack/utils'
+#require 'rack/utils'
 
 module Bushido
   class Middleware

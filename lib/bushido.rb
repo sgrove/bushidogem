@@ -1,12 +1,13 @@
 module Bushido #:nodoc:
   require 'optparse'
-  require 'rest-client'
+  require 'rest_client'
   require 'json'
   require 'highline/import'
   require 'orm_adapter'
     
   require 'engine' if defined?(Rails) && Rails::VERSION::MAJOR == 3
   
+  require "action_dispatch"
   require "rails/routes"
   require "bushido/hooks"
   require "bushido/platform"

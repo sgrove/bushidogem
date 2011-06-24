@@ -1,9 +1,8 @@
 ENV["RAILS_ENV"] = "test"
-require "bu"
-
-require 'test/unit'
-require 'rubygems'
+require "rubygems"
+require "bundler"
 Bundler.setup
 
-
-end
+require "dummy/config/environment"
+require "rails/test_help"
+require "rails/generators/test_case"
