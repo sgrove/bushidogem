@@ -3,8 +3,7 @@
 module Bushido
   class Middleware
 
-    # BUSHIDO_JS_URL = 'http://localhost:4567/javascripts/bushido.js'
-    BUSHIDO_JS_URL = 'http://bushi.do/api/bushido.js'
+    BUSHIDO_JS_URL = "#{Bushido::Platform.host}/api/bushido.js"
 
     include Rack::Utils
 
