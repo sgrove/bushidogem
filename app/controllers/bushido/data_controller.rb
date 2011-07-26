@@ -15,7 +15,16 @@ module Bushido
       puts "Bushibus Data rec'd"
       puts params.inspect
       puts params["category"].inspect
-      Bushido::Data.fire(params["data"], "#{params['category']}.#{params['event']}")
+
+      hook_data             = {}
+      hook_data["category"] = params["category"]
+      hook_data["event"]    = params["event"]
+      hook_data["data"]     = params["data"]
+
+      puts "Firing with: #{hook_data.inspect}"
+
+      Bushido::Data.fire(hook_data, "#{params['category']}.#{params['event']}")
+
       respond_to do |format|
         format.json {render :json => {'acknowledged' => true}, :status => 200}
       end
