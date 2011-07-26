@@ -2,7 +2,7 @@ module Bushido
   class EnvsController < ApplicationController
     # PUT /bushido/envs/:id
     def update
-      if ENV["BUSHIDO_KEY"] != params[:key] or params[:id] == "BUSHIDO_KEY"
+      if ENV["BUSHIDO_APP_KEY"] != params[:key] or params[:id] == "BUSHIDO_KEY"
         respond_to do |format|
           format.html { render :layout => false, :text => true, :status => :forbidden }
           format.json { render :status => :unprocessable_entity }
