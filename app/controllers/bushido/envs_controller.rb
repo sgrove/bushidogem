@@ -18,8 +18,7 @@ module Bushido
             format.html{render :layout => false, :text => true, :status => :unprocessable_entity}
             format.json{render :status => :unprocessable_entity}
           else
-            puts "Firing update hooks method from controller"
-            Bushido::Hooks.fire(params[:id], {params[:id] => ENV[params[:id]]})
+            Bushido::Data.fire(params[:id], {params[:id] => ENV[params[:id]]})
             format.html{render :text => true}
             format.json{render :json => {params[:id] => ENV[params[:id]]}}
           end

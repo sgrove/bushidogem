@@ -26,6 +26,16 @@ RSpec.configure do |config|
   config.use_transactional_fixtures = true
 end
 
+# Redefine #puts to show where they're originating from
+puts "Redefining Object#puts in #{__FILE__}:#{__LINE__}"
+Object.class_eval do
+  alias_method :orig_puts, :puts
+
+  def puts(object='')
+    orig_puts "#{caller.first.split('/').last}: #{object}"
+  end
+end
+
 def preserve_envs(*vars, &block)
   cache = {}
 
