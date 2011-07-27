@@ -15,6 +15,8 @@ module Bushido
     end
 
     def call(env)
+      @bushido_claimed        = (ENV['BUSHIDO_CLAIMED'].nil? or ENV['BUSHIDO_CLAIMED'].blank?) ? false : true
+
       status, headers, response = @app.call(env)
       
       unless @bushido_app_name.empty?

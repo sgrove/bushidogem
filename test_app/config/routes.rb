@@ -1,5 +1,8 @@
 TestApp::Application.routes.draw do
   bushido_routes
+
+  match '/home' => 'static#home'
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

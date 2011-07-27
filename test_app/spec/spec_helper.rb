@@ -1,8 +1,18 @@
-require File.expand_path('../boot', __FILE__)
+#require File.expand_path('../boot', __FILE__)
+require File.expand_path("../../config/environment", __FILE__)
+require 'rspec/rails'
+
+# Requires supporting ruby files with custom matchers and macros, etc,
+# in spec/support/ and its subdirectories.
+Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
 
 require "action_controller/railtie"
 require "action_mailer/railtie"
 require "active_resource/railtie"
+
+# Add this to load Capybara integration:
+require 'capybara/rspec'
+require 'capybara/rails'
 
 # If you have a Gemfile, require the gems listed there, including any gems
 # you've limited to :test, :development, or :production.
@@ -40,5 +50,17 @@ module TestApp
 
     # Configure sensitive parameters which will be filtered from the log file.
     config.filter_parameters += [:password]
+  end
+end
+
+
+def preserve_envs(*keys, &block)
+  cache = {}
+  keys.each { |key| cache[key] = ENV[key] }
+
+  begin
+    yield
+  ensure
+    keys.each { |key| ENV[key] = cache[key] }
   end
 end

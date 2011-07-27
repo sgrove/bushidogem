@@ -11,8 +11,6 @@ module Bushido
       unless ENV['BUSHIDO_APP'].nil?
         app.middleware.use Bushido::Middleware
       end
-      
     end
-    
   end
 end
