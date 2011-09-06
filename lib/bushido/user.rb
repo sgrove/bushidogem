@@ -6,7 +6,6 @@ module Bushido
         "#{Bushido::Platform.host}/unity/v1"
       end
 
-
       # Checks whether user an email and password correspond to a valid bushido
       # user. Returns nil if false, or the Bushido user's ID if true.
       def valid?(email, pass)
@@ -23,6 +22,21 @@ module Bushido
         params = {}
         params[:email] = email
         Bushido::Command.post_command("#{unity_url}/exists", params)
+      end
+
+      # send a Bushido invite with a short description of the app (also a box of chocolates, if he's a Kryptonian)
+      # Bushido::User.invite("clark@kent-on-krypton.com")
+      def invite(email)
+        params = {}
+        params[:email] = email
+        Bushido::Command.post_command("#{unity_url}/invite", params)
+      end
+
+      # List all pending invites
+      # Bushido::User.pending_invites
+      def pending_invites
+        params = {}
+        Bushido::Command.get_command("#{unity_url}/pending_invites", params)
       end
     end
   end
