@@ -24,20 +24,19 @@ module Bushido
         Bushido::Command.post_command("#{unity_url}/exists", params)
       end
 
-      # Use this to invite a user to an application on Bushido.
-      # Bushido::User.invite("jake@navi-on-pandora.com")
+      # send a Bushido invite with a short description of the app (also a box of chocolates, if he's a Kryptonian)
+      # Bushido::User.invite("clark@kent-on-krypton.com")
       def invite(email)
-        if exists?
-            # TODO add an invite to the db and send an email if the user has email notifications enabled
-        else
-            # TODO send a Bushido invite email with short description of the app and also a box of chocolates
-        end
+        params = {}
+        params[:email] = email
+        Bushido::Command.post_command("#{unity_url}/invite", params)
       end
 
       # List all pending invites
       # Bushido::User.pending_invites
       def pending_invites
-          # TODO returns a list of pending invites (email addresses)
+        params = {}
+        Bushido::Command.get_command("#{unity_url}/pending_invites", params)
       end
     end
   end
