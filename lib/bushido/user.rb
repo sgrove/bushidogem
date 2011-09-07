@@ -38,6 +38,15 @@ module Bushido
         params = {}
         Bushido::Command.get_command("#{unity_url}/pending_invites", params)
       end
+
+      # To remove a user from an application
+      # Bushido::User.remove("5z325f4knbm2f")
+      def remove(ido_id)
+          params = {}
+          params[:ido_id] = ido_id
+          Bushido::Command.post_command("#{unity_url}/remove", params)
+      end
+
     end
   end
 end
