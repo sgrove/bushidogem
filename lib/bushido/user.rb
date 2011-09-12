@@ -1,18 +1,15 @@
 module Bushido
   # Bushido User enables user validation against Bushido's server
-  class User
+  class User < Base
     class << self
-      def unity_url #:nodoc:
-        "#{Bushido::Platform.host}/unity/v1"
-      end
-
+      
       # Checks whether user an email and password correspond to a valid bushido
       # user. Returns nil if false, or the Bushido user's ID if true.
       def valid?(email, pass)
         params = {}
         params[:email] = email
         params[:pass] = pass
-        Bushido::Command.post_command("#{unity_url}/valid", params)
+        Bushido::Command.post_command(valid_unity_url, params)
       end
       
 
@@ -21,7 +18,7 @@ module Bushido
       def exists?(email)
         params = {}
         params[:email] = email
-        Bushido::Command.post_command("#{unity_url}/exists", params)
+        Bushido::Command.post_command(exists_unity_url, params)
       end
 
       # send a Bushido invite with a short description of the app (also a box of chocolates, if he's a Kryptonian)
@@ -29,14 +26,14 @@ module Bushido
       def invite(email)
         params = {}
         params[:email] = email
-        Bushido::Command.post_command("#{unity_url}/invite", params)
+        Bushido::Command.post_command(invite_unity_url, params)
       end
 
       # List all pending invites
       # Bushido::User.pending_invites
       def pending_invites
         params = {}
-        Bushido::Command.get_command("#{unity_url}/pending_invites", params)
+        Bushido::Command.get_command(pending_invites_unity_url, params)
       end
 
       # To remove a user from an application
@@ -44,7 +41,7 @@ module Bushido
       def remove(ido_id)
           params = {}
           params[:ido_id] = ido_id
-          Bushido::Command.post_command("#{unity_url}/remove", params)
+          Bushido::Command.post_command(remove_unity_url, params)
       end
 
     end

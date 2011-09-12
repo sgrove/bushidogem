@@ -16,7 +16,7 @@ module Bushido
       end
 
       def api_url(path)
-        "#{path[:prefix]}/#{Bushido::Config.api_version}/#{path[:method]}"
+        "#{Bushido::Platform.host}/#{path[:prefix]}/#{Bushido::Config.api_version}/#{path[:method]}"
       end
     end
   end

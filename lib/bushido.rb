@@ -10,7 +10,7 @@ module Bushido #:nodoc:
   require "action_dispatch"
   require "rails/routes"
   require "bushido/config"
-  require "bushido/actionmailer"
+  require "bushido/action_mailer"
   require "bushido/base"
   require "bushido/hooks"
   require "bushido/platform"
