@@ -2,21 +2,17 @@ module Bushido
 
   class Base
     class << self
-      def method_missing(method, *args)
-          if /.*_url/ =~ method
-            method_strings = method.to_s.split "_"
-            method_strings.pop
-            path = {}
-            path[:prefix] = method_strings.pop
-            path[:method] = method_strings.join "_"
-            api_url(path)
-          else
-            super
+      url_pairs = {:user=>[:valid, :exists, :invite, :pending_invites, :remove],
+                   :email=>[:send]
+                  }
+      
+      # NOTE Cannot use define_singleton_method since ruby 1.8 compatibility is a must
+      url_pairs.each_pair do |prefix, method_names|
+        method_names.each do |method_name|
+          define_method "#{method_name}_#{prefix}_url".to_sym do
+            "#{Bushido::Platform.host}/#{prefix}/#{Bushido::Config.api_version}/#{method_name}"
           end
-      end
-
-      def api_url(path)
-        "#{Bushido::Platform.host}/#{path[:prefix]}/#{Bushido::Config.api_version}/#{path[:method]}"
+        end
       end
     end
   end
