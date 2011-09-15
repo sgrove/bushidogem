@@ -5,9 +5,10 @@ module Bushido #:nodoc:
   require 'highline/import'
   require 'orm_adapter'
     
-  require 'engine' if defined?(Rails) && Rails::VERSION::MAJOR == 3
-  
-  require "action_dispatch"
+  if defined?(Rails) && Rails::VERSION::MAJOR == 3
+    require 'engine'
+    require "action_dispatch"
+  end
   require "rails/routes"
   require "bushido/base"
   require "bushido/config"
