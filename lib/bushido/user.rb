@@ -1,6 +1,6 @@
 module Bushido
   # Bushido User enables user validation against Bushido's server
-  class User < Base
+  class User < Bushido::Base
     class << self
       
       # Checks whether user an email and password correspond to a valid bushido

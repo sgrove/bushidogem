@@ -3,7 +3,7 @@ module Bushido
   class Base
     class << self
       url_pairs = {
-                    :user=>[:valid, :exists, :invite, :pending_invites, :remove]
+                    :unity=>[:valid, :exists, :invite, :pending_invites, :remove]
                   }
       
       # NOTE Cannot use define_singleton_method since ruby 1.8 compatibility is a must
