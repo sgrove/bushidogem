@@ -3,7 +3,7 @@ module Bushido
   class Base
     class << self
       url_pairs = {
-                    :unity=>[:valid, :exists, :invite, :pending_invites, :remove]
+                    :unity=>[:valid, :exists, :invite, :pending_invites, :remove],
                     :email=>[:send]
                   }
       
