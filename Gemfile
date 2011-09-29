@@ -10,7 +10,7 @@ gem "sqlite3-ruby"
 group :development, :test do
   # gem "webrat", "0.7.2", :require => false
   # gem "mocha", :require => false
-  gem 'rspec'
+  gem 'rspec-rails'
   gem 'cover_me'
 end
 
