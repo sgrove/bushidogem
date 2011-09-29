@@ -4,6 +4,7 @@ module Bushido
     class << self
       url_pairs = {
                     :unity=>[:valid, :exists, :invite, :pending_invites, :remove]
+                    :email=>[:send]
                   }
       
       # NOTE Cannot use define_singleton_method since ruby 1.8 compatibility is a must
