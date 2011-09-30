@@ -11,7 +11,6 @@ module Bushido
         params[:pass] = pass
         Bushido::Command.post_command(valid_unity_url, params)
       end
-      
 
       # Checks whether email corresponds to a valid Bushido user.
       # Returns true or false
