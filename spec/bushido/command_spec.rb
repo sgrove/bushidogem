@@ -12,19 +12,11 @@ describe "Bushido::Command" do
     it "should initially return true" do
       Bushido::Command.last_command_successful?.should be_true
     end
-
-    it "should return false if the last command errored" do
-      # TODO test it by stubbing out a request to error
-    end
   end
 
   describe "last_command_errored?" do
     it "should initially return false" do
       Bushido::Command.last_command_errored?.should be_false
-    end
-
-    it "should return true if the last command errored" do
-      # TODO test it by stubbing out a request to error
     end
   end
 
