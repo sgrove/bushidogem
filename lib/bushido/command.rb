@@ -11,7 +11,7 @@ module Bushido
 
       def get_command(url, params={})
         @@request_count += 1
-        params.merge!({:auth_token => Bushido::Platform.key}) if params[:auth_token].nil? unless Bushido::Platform.key.nil?
+        params.merge!({"auth_token" => Bushido::Platform.key}) if params[:auth_token].nil? unless Bushido::Platform.key.nil?
 
         begin
           raw = RestClient.get(url, {:params => params, :accept => :json})
