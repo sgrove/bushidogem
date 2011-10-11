@@ -29,7 +29,7 @@ module Bushido
         @@request_count += 1
         
         unless Bushido::Platform.key.nil?
-          params[:auth_token] ||= Bushido::Platform.key
+          params["auth_token"] ||= Bushido::Platform.key
         end
 
         begin
