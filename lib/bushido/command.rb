@@ -28,8 +28,10 @@ module Bushido
       def post_command(url, params)
         @@request_count += 1
         
-        if params[:auth_token].nil? unless Bushido::Platform.key.nil?
-          params[:auth_token] = Bushido::Platform.key
+        unless Bushido::Platform.key.nil?
+          if params[:auth_token].nil?
+            params[:auth_token] = Bushido::Platform.key
+          end
         end
 
         begin
