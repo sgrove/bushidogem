@@ -5,7 +5,6 @@ module Bushido
         ENV['BUSHIDO_NAME']
       end
 
-
       def key
         ENV['BUSHIDO_APP_KEY']
       end
@@ -17,6 +16,10 @@ module Bushido
       def host
         port = ENV['BUSHIDO_PORT'] ? ":#{ENV['BUSHIDO_PORT']}" : ""
         "http://#{ENV['BUSHIDO_HOST'] || 'bushi.do'}#{port}"
+      end
+
+      def on_bushido?
+        ENV['HOSTING_PLATFORM']=="bushido"
       end
     end
   end
