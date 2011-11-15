@@ -27,7 +27,10 @@ module Bushido
 
       def post_command(url, params)
         @@request_count += 1
-        params.merge!({:auth_token => Bushido::Platform.key}) if params[:auth_token].nil? unless Bushido::Platform.key.nil?
+        
+        unless Bushido::Platform.key.nil?
+          params["auth_token"] ||= Bushido::Platform.key
+        end
 
         begin
           raw = RestClient.post(url, params.to_json, :content_type => :json, :accept => :json)
