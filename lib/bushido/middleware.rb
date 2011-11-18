@@ -12,9 +12,15 @@ module Bushido
       @bushido_app_name       = ENV['BUSHIDO_APP']
       @bushido_metrics_token  = ENV['BUSHIDO_METRICS_TOKEN']
       @bushido_claimed        = (ENV['BUSHIDO_CLAIMED'].nil? or ENV['BUSHIDO_CLAIMED'].blank?) ? false : true
+      puts "_"*30
+      puts "BUSHI MIDDLE WARE"
+      puts "_"*30
     end
 
     def call(env)
+      puts "_"*30
+      puts "Bushi middle call!!!!!"
+
       @bushido_invitation_token = (Rack::Request.new(env).params[:invitation_token].nil? ) ? '' : Rack::Request.new(env).params[:invitation_token]
       @bushido_claimed        = (ENV['BUSHIDO_CLAIMED'].nil? or ENV['BUSHIDO_CLAIMED'].blank?) ? false : true
 
