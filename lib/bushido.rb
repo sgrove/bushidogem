@@ -1,12 +1,12 @@
+puts "OMG BUSHIDO GEM INCLUDED?"
 module Bushido #:nodoc:
   require 'optparse'
   require 'rest_client'
   require 'json'
   require 'highline/import'
   require 'orm_adapter'
-    
+  require 'engine'  
   if defined?(Rails) && Rails::VERSION::MAJOR == 3
-    require 'engine'
     require "action_dispatch"
   end
   require "rails/routes"
@@ -26,7 +26,7 @@ module Bushido #:nodoc:
   require "bushido/middleware"
   require "bushido/models"
   require "bushido/schema"
-  
+
   # Default way to setup Bushido. Run rails generate bushido_install to create
   # a fresh initializer with all configuration values.
   def self.setup
