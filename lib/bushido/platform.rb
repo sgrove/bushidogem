@@ -14,11 +14,11 @@ module Bushido
       end
 
       def protocol
-        ENV['BUSHIDO_PROTOCOL']
+        ENV['BUSHIDO_PROTOCOL'] || "https"
       end
 
       def port
-        ENV['BUSHIDO_PORT'] || "https"
+        ENV['BUSHIDO_PORT']
       end
 
       def host
