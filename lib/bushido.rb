@@ -27,6 +27,14 @@ module Bushido #:nodoc:
   require "bushido/models"
   require "bushido/schema"
 
+  # Manually require the controllers for rails 2
+  if defined?(Rails) && Rails::VERSION::MAJOR == 2
+    base_dir = "#{File.dirname(__FILE__)}/.."
+
+    require "#{base_dir}/app/controllers/bushido/data_controller"
+    require "#{base_dir}/app/controllers/bushido/envs_controller"
+  end
+
   # Default way to setup Bushido. Run rails generate bushido_install to create
   # a fresh initializer with all configuration values.
   def self.setup
