@@ -11,6 +11,7 @@ module Bushido #:nodoc:
   require "rails/routes"
   require "bushido/base"
   require "bushido/config"
+  require "bushido/smtp"
   require "bushido/action_mailer"
   require "bushido/hooks"
   require "bushido/platform"

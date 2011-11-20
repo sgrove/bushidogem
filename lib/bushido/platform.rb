@@ -13,9 +13,18 @@ module Bushido
         "#{host}/apps/#{name}/bus"
       end
 
+      def protocol
+        ENV['BUSHIDO_PROTOCOL']
+      end
+
+      def port
+        ENV['BUSHIDO_PORT'] || "https"
+      end
+
       def host
-        port = ENV['BUSHIDO_PORT'] ? ":#{ENV['BUSHIDO_PORT']}" : ""
-        "https://#{ENV['BUSHIDO_HOST'] || 'bushi.do'}#{port}"
+        bushido_port = port ? ":#{port}" : ""
+        bushido_host = ENV['BUSHIDO_HOST'] || 'bushi.do'
+        "#{protocol}://#{bushido_host}#{bushido_port}"
       end
 
       def on_bushido?
