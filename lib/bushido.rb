@@ -1,4 +1,3 @@
-puts "OMG BUSHIDO GEM INCLUDED?"
 module Bushido #:nodoc:
   require 'optparse'
   require 'rest_client'
