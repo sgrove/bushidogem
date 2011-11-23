@@ -1,0 +1,13 @@
+config/facebook.yml
+config/database.yml
+log/*
+db/*.sqlite3
+db/schema.rb
+*.sw?
+*~
+tmtags
+public/mocks
+bin/*
+permanent/*
+public/store/*
+.DS_Store
