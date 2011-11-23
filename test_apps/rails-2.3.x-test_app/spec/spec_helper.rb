@@ -5,6 +5,8 @@ require File.expand_path(File.join(File.dirname(__FILE__),'..','config','environ
 require 'spec/autorun'
 require 'spec/rails'
 
+Bundler.require(:default, Rails.env) if defined?(Bundler)
+
 # Uncomment the next line to use webrat's matchers
 #require 'webrat/integrations/rspec-rails'
 
@@ -51,4 +53,15 @@ Spec::Runner.configure do |config|
   # == Notes
   #
   # For more information take a look at Spec::Runner::Configuration and Spec::Runner
+end
+
+def preserve_envs(*keys, &block)
+  cache = {}
+  keys.each { |key| cache[key] = ENV[key] }
+
+  begin
+    yield
+  ensure
+    keys.each { |key| ENV[key] = cache[key] }
+  end
 end
