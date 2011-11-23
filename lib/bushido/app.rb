@@ -187,6 +187,13 @@ module Bushido
       end
 
 
+      # Check if the app is allowed to send emails
+      # Apps are rate-limited according to their tier
+      def mail_allowed?
+        Bushido::Command.get_command(Bushido::Base.allowed_email_url)
+      end
+
+
       def ssh_key #:nodoc:
         get({:gift => "ssh_key"})["ssh_key"]
       end

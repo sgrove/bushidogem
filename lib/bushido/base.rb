@@ -1,10 +1,9 @@
 module Bushido
-
   class Base
     class << self
       url_pairs = {
                     :unity=>[:valid, :exists, :invite, :pending_invites, :remove],
-                    :email=>[:send]
+                    :email=>[:send, :allowed]
                   }
       
       # NOTE Cannot use define_singleton_method since ruby 1.8 compatibility is a must
@@ -17,5 +16,4 @@ module Bushido
       end
     end
   end
-
 end
