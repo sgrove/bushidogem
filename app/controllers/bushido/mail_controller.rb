@@ -15,7 +15,7 @@ module Bushido
           :sender    => params[:sender],
           :from      => params[:from],
           :subject   => params[:subject],
-          :body      => params["body-mime"]
+          :body      => params["body-mime"],
           :timestamp => params[:timestamp],
           :token     => params[:token],
           :signature => params[:signature]
