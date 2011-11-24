@@ -32,6 +32,7 @@ module Bushido #:nodoc:
     base_dir = "#{File.dirname(__FILE__)}/.."
 
     require "#{base_dir}/app/controllers/bushido/data_controller"
+    require "#{base_dir}/app/controllers/bushido/mail_controller"
     require "#{base_dir}/app/controllers/bushido/envs_controller"
   end
 
