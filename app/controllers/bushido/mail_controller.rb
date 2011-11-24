@@ -22,7 +22,7 @@ module Bushido
         }
       }
 
-      Bushido::Data.fire(hook_data, "#{params[:category]}.#{params[:event]}")
+      Bushido::Data.fire(hook_data, "mail.received")
       respond_to do |format|
         format.json {
           render :json => {
