@@ -4,7 +4,6 @@ gem "rails", "3.0.10"
 gem "bushido", :path => "../../"
 
 group :test, :development do
-  gem "rvm"
   gem "rspec"
   gem "rspec-rails"
   gem "capybara"
