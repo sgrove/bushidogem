@@ -3,8 +3,6 @@ module Bushido
 
     # POST /bushido/mail
     def index
-      logger.debug "#{params.inspect}"
-
       hook_data = {}
       hook_data[:category] = "mail"
       hook_data[:event]    = "received"
