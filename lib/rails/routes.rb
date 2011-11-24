@@ -10,6 +10,9 @@ if ActionController::Routing.name =~ /ActionDispatch/
             namespace 'bushido' do
               resources :envs, :only => [ :update ]
               match '/data' => "data#index"
+
+              # TODO restrict to POST-only
+              match '/mail' => "mail#index"
             end
           end
         end
@@ -27,7 +30,8 @@ else
         def bushido_routes(routes, mapping)
           mapping.namespace 'bushido' do
             mapping.resources :envs, :only => [ :update ]
-            mapping.connect '/data', :controller=> :data, :action=>:index
+            mapping.connect '/data', :controller=>:data, :action=>:index
+            mapping.connect '/mail', :controller=>:mail, :action=>:index
           end
         end
       end
