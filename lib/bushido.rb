@@ -4,7 +4,7 @@ module Bushido #:nodoc:
   require 'json'
   require 'highline/import'
   require 'orm_adapter'
-  require 'engine'  
+  require 'bushido/engine'  
   if defined?(Rails) && Rails::VERSION::MAJOR == 3
     require "action_dispatch"
   end
@@ -13,7 +13,7 @@ module Bushido #:nodoc:
   require "bushido/config"
   require "bushido/smtp"
   require "bushido/action_mailer"
-  require "bushido/hooks"
+  require "hooks"
   require "bushido/platform"
   require "bushido/utils"
   require "bushido/command"

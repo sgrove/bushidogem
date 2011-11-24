@@ -1,4 +1,4 @@
-require 'bushido'
+#require 'bushido'
 
 if defined?(Rails) && Rails::VERSION::MAJOR == 3
   require 'rails'
@@ -17,5 +17,5 @@ if defined?(Rails) && Rails::VERSION::MAJOR == 3
   end
 else
   # Rails 2 handling
-  Rails.configuration.middleware.use 'Bushido::Middleware'  
+  Rails.configuration.middleware.use 'Bushido::Middleware'
 end
