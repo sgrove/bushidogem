@@ -27,11 +27,11 @@ else
     class RouteSet
       
       Mapper.class_eval do
-        def bushido_routes(routes, mapping)
-          mapping.namespace 'bushido' do
-            mapping.resources :envs, :only => [ :update ]
-            mapping.connect '/data', :controller=>:data, :action=>:index
-            mapping.connect '/mail', :controller=>:mail, :action=>:index
+        def bushido_routes
+          namespace 'bushido' do |bushido|
+            bushido.resources :envs, :only => [ :update ]
+            bushido.connect '/data', :controller=>:data, :action=>:index
+            bushido.connect '/mail', :controller=>:mail, :action=>:index
           end
         end
       end
