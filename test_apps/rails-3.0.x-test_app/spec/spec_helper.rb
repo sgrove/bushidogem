@@ -1,10 +1,22 @@
 #require File.expand_path('../boot', __FILE__)
+
+ENV["RAILS_ENV"] ||= 'test'
+
+rvm_lib_path = "#{`echo $rvm_path`.strip}/lib"
+$LOAD_PATH.unshift(rvm_lib_path) unless $LOAD_PATH.include?(rvm_lib_path)
+require 'rvm'
+RVM.use("1.9.2")
+RVM.gemset_use! "bushidogem-30xtest"
+RVM.run "gem install bundler --no-ri --no-rdoc && bundle"
+
+
 require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
-Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
+
+Dir[Rails.root.join("../../spec/support/**/*.rb")].each {|f| require f}
 
 require "action_controller/railtie"
 require "action_mailer/railtie"

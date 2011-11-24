@@ -6,6 +6,7 @@ gemspec
 
 gem "rails", "~> 3.0.7"
 gem "sqlite3-ruby"
+gem "rvm"
 
 group :development, :test do
   # gem "webrat", "0.7.2", :require => false

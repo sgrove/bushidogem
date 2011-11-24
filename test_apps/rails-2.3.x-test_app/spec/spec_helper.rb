@@ -1,9 +1,19 @@
 # This file is copied to ~/spec when you run 'ruby script/generate rspec'
 # from the project root directory.
 ENV["RAILS_ENV"] ||= 'test'
+
+rvm_lib_path = "#{`echo $rvm_path`.strip}/lib"
+$LOAD_PATH.unshift(rvm_lib_path) unless $LOAD_PATH.include?(rvm_lib_path)
+require 'rvm'
+RVM.use("1.8.7")
+RVM.gemset_use! "bushidogem-23xtest"
+RVM.run "gem install bundler --no-ri --no-rdoc && bundle"
+
 require File.expand_path(File.join(File.dirname(__FILE__),'..','config','environment'))
 require 'spec/autorun'
 require 'spec/rails'
+
+require 'webrat'
 
 Bundler.require(:default, Rails.env) if defined?(Bundler)
 
@@ -13,6 +23,11 @@ Bundler.require(:default, Rails.env) if defined?(Bundler)
 # Requires supporting files with custom matchers and macros, etc,
 # in ./support/ and its subdirectories.
 Dir[File.expand_path(File.join(File.dirname(__FILE__),'support','**','*.rb'))].each {|f| require f}
+
+Webrat.configure do |config|
+  config.mode = :rails
+  config.open_error_files = false # prevents webrat from opening the browser
+end
 
 Spec::Runner.configure do |config|
   # If you're not using ActiveRecord you should remove these
