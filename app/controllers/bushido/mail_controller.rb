@@ -23,12 +23,7 @@ module Bushido
       }
 
       Bushido::Data.fire(hook_data, "mail.received")
-      respond_to do |format|
-        format.json {
-          render :json => {
-            :acknowledged => true,
-            :status => 200
-          }.to_json
-        }
-      end          
+      render :text => "ok", :status => 200
     end
+  end
+end
