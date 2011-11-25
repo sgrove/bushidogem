@@ -1,25 +1,34 @@
+# -*- coding: utf-8 -*-
 module Bushido
   class MailController < ApplicationController
 
     # POST /bushido/mail
     def index
       hook_data = {}
-      hook_data[:category] = "mail"
-      hook_data[:event]    = "received"
+      hook_data[:category]     = "mail"
+      hook_data[:event]        = "received"
+      hook_data[:data]         = {}
+      hook_data[:data][:mail]  = {}
 
-      hook_data[:data] = {
-        :mail => {
-          :recipent  => params[:recipent],
-          :sender    => params[:sender],
-          :from      => params[:from],
-          :subject   => params[:subject],
-          :body      => params["body-mime"],
-          :timestamp => params[:timestamp],
-          :token     => params[:token],
-          :signature => params[:signature]
-        }
-      }
+      mailgun_params = [
+        "recipient",
+        "sender",
+        "from",
+        "subject",
+        "body-plain",
+        "stripped-text",
+        "stripped-signature",
+        "body-html",
+        "stripped-html",
+        "attachment-count",
+        "timestamp",
+        "token",
+        "signature"]
 
+      mailgun_keys.each do |m|
+        hook_data[:data][:mail][m] = params[m]
+      end
+                                                    
       Bushido::Data.fire(hook_data, "mail.received")
       render :text => "ok", :status => 200
     end
