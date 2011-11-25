@@ -25,7 +25,7 @@ module Bushido
         "token",
         "signature"]
 
-      mailgun_keys.each do |m|
+      mailgun_params.each do |m|
         hook_data[:data][:mail][m] = params[m]
       end
                                                     
