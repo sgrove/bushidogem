@@ -10,7 +10,8 @@ module ActionMailer
         return false
       end
 
-      result = Bushido::App.mail_allowed?
+      #result = Bushido::App.mail_allowed?
+      result = true
 
       if result
         logger.info result.inspect unless logger.nil?
