@@ -11,7 +11,7 @@ module ActionMailer
       end
 
       #result = Bushido::App.mail_allowed?
-      result = true
+      result = {"success" => true}
 
       if result
         logger.info result.inspect unless logger.nil?
