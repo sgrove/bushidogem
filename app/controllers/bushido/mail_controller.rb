@@ -5,9 +5,6 @@ module Bushido
     # POST /bushido/mail
     def index
       hook_data             = {}
-      hook_data["category"] = "mail"
-      hook_data["event"]    = "received"
-      hook_data["data"]     = {}
 
       attachments = []
 
@@ -18,7 +15,7 @@ module Bushido
 
       # Copy the params to the hook data
       (params.keys - ["controller", "action"]).each do |param|
-        hook_data["data"][param.downcase] = params[param]
+        hook_data[param.downcase] = params[param]
       end
 
       hook_data["attachments"] = attachments
