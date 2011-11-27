@@ -20,6 +20,8 @@ module ActionMailer
 
           unless logger.nil?
             logger.info "App allowed to send email, sending via SMTP"
+            logger.info "Sending:"
+            logger.info mail.inspect
             __send__("perform_delivery_smtp", mail) if perform_deliveries
           end
         else
