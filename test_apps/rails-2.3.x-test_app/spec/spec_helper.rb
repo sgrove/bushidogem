@@ -13,7 +13,8 @@ require File.expand_path(File.join(File.dirname(__FILE__),'..','config','environ
 require 'spec/autorun'
 require 'spec/rails'
 
-require 'webrat'
+require 'capybara/rails'
+require 'capybara/dsl'
 
 Bundler.require(:default, Rails.env) if defined?(Bundler)
 
@@ -24,10 +25,10 @@ Bundler.require(:default, Rails.env) if defined?(Bundler)
 # in ./support/ and its subdirectories.
 Dir[File.expand_path(File.join(File.dirname(__FILE__),'support','**','*.rb'))].each {|f| require f}
 
-Webrat.configure do |config|
-  config.mode = :rails
-  config.open_error_files = false # prevents webrat from opening the browser
-end
+# Webrat.configure do |config|
+#   config.mode = :rails
+#   config.open_error_files = false
+# end
 
 Spec::Runner.configure do |config|
   # If you're not using ActiveRecord you should remove these
@@ -36,7 +37,7 @@ Spec::Runner.configure do |config|
   config.use_transactional_fixtures = true
   config.use_instantiated_fixtures  = false
   config.fixture_path = RAILS_ROOT + '/spec/fixtures/'
-
+  config.include(Capybara, :type => :integration) 
   # == Fixtures
   #
   # You can declare fixtures for each example_group like this:
