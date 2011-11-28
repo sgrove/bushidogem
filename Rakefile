@@ -1,6 +1,7 @@
 require 'rake/testtask'
 require 'rspec/core/rake_task'
 require 'bundler'
+require 'ci/reporter/rake/rspec'
 Bundler::GemHelper.install_tasks
 
 task :default => :test

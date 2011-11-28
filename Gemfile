@@ -13,6 +13,7 @@ group :development, :test do
   gem "rspec-rails"
   gem "configatron", "~> 2.8.3"
   gem "cover_me"
+  gem "ci_reporter"
 end
 
 platforms :ruby do
