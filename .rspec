@@ -1,2 +1,4 @@
+--format nested
 --color
---format documentation
+--profile
+
