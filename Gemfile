@@ -12,6 +12,7 @@ group :development, :test do
   # gem "mocha", :require => false
   gem 'rspec-rails'
   gem 'cover_me'
+  gem 'ci_reporter'
 end
 
 platforms :ruby do
