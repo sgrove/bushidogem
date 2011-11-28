@@ -10,7 +10,8 @@ module ActionMailer
         return false
       end
 
-      result = Bushido::App.mail_allowed?
+      #result = Bushido::App.mail_allowed?
+      result = {"success" => true}
 
       if result
         logger.info result.inspect unless logger.nil?
@@ -19,6 +20,8 @@ module ActionMailer
 
           unless logger.nil?
             logger.info "App allowed to send email, sending via SMTP"
+            logger.info "Sending:"
+            logger.info mail.inspect
             __send__("perform_delivery_smtp", mail) if perform_deliveries
           end
         else
