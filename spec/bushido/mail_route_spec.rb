@@ -5,8 +5,8 @@ describe "Bushido::Mailroute" do
     Bushido::Mailroute.routes
   end
 
-  def constraints
-    Bushido::Mailroute.routes.constraints
+  def constraints(route_name)
+    Bushido::Mailroute.routes.routes[route_name][:constraints]
   end
 
   def params
@@ -22,13 +22,12 @@ describe "Bushido::Mailroute" do
   end
 
   context 'when drawing routes' do
-    it 'should start with empty routes and constraints' do
-      routes.routes.should == []
-      routes.constraints.should == []
+    it 'should start with empty routes' do
+      routes.routes.should == {}
     end
 
     it 'should create an internal instance of Bushido::Mailroute' do
-      routes.routes.should == []
+      routes.routes.should == {}
       Bushido::Mailroute.map { }
       routes.class.should == Bushido::Mailroute
     end
@@ -44,7 +43,7 @@ describe "Bushido::Mailroute" do
         mapper.match('test-call-back') { }
       end
 
-      routes.routes.should == [{"test-call-back"=>[]}]
+      routes.routes.should == {"test-call-back"=>{:rules => [], :constraints => []}}
     end
 
     it 'should create a route with rules for each callback added' do
@@ -52,7 +51,7 @@ describe "Bushido::Mailroute" do
         mapper.match('test-call-back') { mapper.from('test-sender') }
       end
 
-      routes.routes.should == [{"test-call-back"=>[["from", "/test-sender/", nil]]}]
+      routes.routes.should == {"test-call-back"=>{:rules => [["from", "/test-sender/", nil]], :constraints => []}}
     end
 
     it 'should allow composable rules for the same field' do
@@ -100,7 +99,9 @@ describe "Bushido::Mailroute" do
     it 'should raise an error if an unknown check is specified' do
       lambda {
         Bushido::Mailroute.map do |mapper|
-          mapper.add_constraint(:reply, :invalid_checker)
+          mapper.match('test-callback') do 
+            mapper.add_constraint(:reply, :invalid_checker)
+          end
         end
       }.should raise_error(StandardError)
     end
@@ -108,11 +109,13 @@ describe "Bushido::Mailroute" do
 
     it 'should add the constraint for the param field' do
       Bushido::Mailroute.map do |mapper|
-        mapper.add_constraint(:reply, :required)
+        mapper.match('test-callback') do
+          mapper.add_constraint(:reply, :required)
+        end
       end
 
-      constraints.size.should == 1
-      constraints.first.class.should == Proc
+      constraints('test-callback').size.should == 1
+      constraints('test-callback').first.class.should == Proc
     end
   end
 

@@ -2,7 +2,7 @@ module Bushido
   class Mailroute
     def self.map(&block)
       raise StandardError.new("Mailroute only supported in Ruby >= 1.9.1") if RUBY_VERSION < "1.9.1"
-
+      
       @@routes ||= self.new
       yield @@routes
     end
@@ -15,8 +15,30 @@ module Bushido
       @@routes = self.new
     end
 
+    def self.pretty_print_routes
+      @@routes.routes.each_pair do |route_name, definition|
+        puts "#{route_name} => "
+        definition[:rules].each do |rule|
+          pretty_print_rule(rule, "\t\t")
+        end
+        definition[:constraints].each do |constraint|
+          pretty_print_contraint(constraint, "\t\t")
+        end
+      end
+    end
+
+    def self.pretty_print_rule(rule, prefix="")
+      output = "#{prefix}#{rule.first} => #{string_to_regex(rule[1]).inspect}, required? #{rule.last == true}"
+      puts output
+    end
+
+    def self.pretty_print_contraint(constraint, prefix="")
+      output = "#{prefix}Constraint: #{constraint.inspect}"
+      puts output
+    end
+
     # Taken from somewhere on stackoverflow, props to the author!
-    def string_to_regex(string)
+    def self.string_to_regex(string)
       return nil unless string.strip.match(/\A\/(.*)\/(.*)\Z/mx)
       regexp , flags = $1 , $2
       return nil if !regexp || flags =~ /[^xim]/m
@@ -31,7 +53,8 @@ module Bushido
     def self.field_matcher(*field_names)
       self.class_eval do
         field_names.each do |field_name|
-          define_method field_name do |line, options={:constraints => {}}|
+          define_method field_name do |line, *args|
+            options = args.first || {:constraints => {}}
             add_route_rule(field_name.to_s, build_matcher(line, options[:constraints]), options[:required])
           end
         end
@@ -50,19 +73,21 @@ module Bushido
       /\w+/
     end
 
+    def number
+      /\d+/
+    end
+
     def words_and_spaces
       /[\w|\s]+/
     end
 
 
     def initialize
-      @routes ||= []
-      @constraints = []
+      @routes ||= ActiveSupport::OrderedHash.new
     end
 
     def match(target, &block)
-      @routes << {target => []}
-      @current_target = @current_target.nil? ? 0 : @current_target + 1
+      @routes[@current_target = target] = {:rules => [], :constraints => []}
       yield self
     end
 
@@ -70,7 +95,7 @@ module Bushido
     # Constraint procs must return true if the mail should be allowed
     def add_constraint(params_field_name, requirement_type)
       checkers = {
-        :not_allowed => Proc.new { |params| puts params_field_name; puts params.inspect; params[params_field_name.to_s].nil? },
+        :not_allowed => Proc.new { |params| params[params_field_name.to_s].nil? },
         :required    => Proc.new { |params| not params[params_field_name.to_s].nil? },
         :custom      => Proc.new { |params| requirement_type.call(params[params_field_name.to_s]) }
       }
@@ -79,22 +104,20 @@ module Bushido
 
       raise StandardError if checker.nil?
 
-      @constraints << checker
-      @constraints.flatten! # In case we've added a nil
+      @routes[@current_target][:constraints] << checker
+      @routes[@current_target][:constraints].flatten! # In case we've added a nil
     end
 
     def process(mail)
       @params = preprocess_mail(mail)
 
       # Iterate through the routes and test each rule for each route against current mail
-      @routes.each do |route|
+      @routes.each_pair do |route_name, definition|
         _matches = true
-        
-        # route: {'name-of-route' => [[:field, matcher]]}
-        route_name = route.keys.first
 
-        route[route_name].each do |matcher|
-          result = string_to_regex(matcher[1]).match(mail[matcher.first])
+        # route: {'name-of-route' => {:rules => [[:field, matcher]], :constraints => []}}
+        definition[:rules].each do |matcher|
+          result = self.class.string_to_regex(matcher[1]).match(mail[matcher.first])
           if result.nil?
             _matches = false
             break
@@ -105,11 +128,14 @@ module Bushido
         end
         
         # Run param-based constraints
-        if _matches and @constraints.select{ |proc| proc.call(@params) != true }.empty?
+        if _matches and constraints_pass?(definition[:constraints], params)
           params['mail'] = mail
-          Bushido::Data.fire(params, route_name)
+          puts "About to fire this thins: #{params.inspect}, #{route_name}"
+          return Bushido::Data.fire(params, route_name.gsub('.', '_'))
           break
         end
+
+        puts "No routes matched :("
       end
     end
 
@@ -125,7 +151,7 @@ module Bushido
         end
       end
 
-      if from_details = mail['from'].match(/^([\w|\s]*) <(.*)>/)
+      if from_details = mail['from'].try(:match, /^([\w|\s]*) <(.*)>/)
         params['from_name']  = from_details[1]
         params['from_email'] = from_details[2]
       end
@@ -142,6 +168,10 @@ module Bushido
       temp = "/#{line}/"
       constraints.keys.each { |key| temp.gsub!(":#{key}", "(?<#{key}>#{constraints[key].inspect[1..-2]})")  }
       temp
+    end
+
+    def constraints_pass?(constraints, params)
+      constraints.nil? or constraints.select{ |proc| proc.call(params) != true }.empty?
     end
   end
 end
