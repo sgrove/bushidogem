@@ -20,7 +20,7 @@ module Bushido
 
       status, headers, response = @app.call(env)
       
-      unless @bushido_app_name.empty?
+      unless @bushido_app_name.nil? or @bushido_app_name.blank?
         content = ""
         response.each { |part| content += part }
 
