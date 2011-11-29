@@ -2,9 +2,9 @@ module Bushido
   class Data #:nodoc:
     @@observers = []
 
-    def self.add_observer(klass)
-      #puts "Subscribing #{klass} to Bushido events"
-      @@observers << klass
+    def self.add_observer(observer)
+      puts "Subscribing #{observer} to Bushido data calls"
+      @@observers << observers
     end
     
     def self.fire(data, event)
