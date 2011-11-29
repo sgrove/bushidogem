@@ -4,6 +4,7 @@ module Bushido
 
     # POST /bushido/mail
     def index
+      puts "Handling email!"
       mail = {}
       attachments = []
 
@@ -18,6 +19,9 @@ module Bushido
       end
 
       mail["attachments"] = attachments
+
+      puts "params: #{params.inspect}"
+      puts "mail: #{mail.inspect}"
 
       # Mailroute is in charge of figuring out which callback to trigger
       Bushido::Mailroute.routes.process(mail)

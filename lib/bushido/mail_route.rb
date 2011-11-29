@@ -109,6 +109,7 @@ module Bushido
     end
 
     def process(mail)
+      puts "Processing mail through routes!"
       @params = preprocess_mail(mail)
 
       # Iterate through the routes and test each rule for each route against current mail
