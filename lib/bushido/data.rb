@@ -4,7 +4,7 @@ module Bushido
 
     def self.add_observer(observer)
       puts "Subscribing #{observer} to Bushido data calls"
-      @@observers << observers
+      @@observers << observer
     end
     
     def self.fire(data, event)
