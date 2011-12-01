@@ -40,7 +40,7 @@ describe "Bushido::Mailroute" do
 
     it 'should create a route for each callback added' do
       Bushido::Mailroute.map do |mapper|
-        mapper.match('test-call-back') { }
+        mapper.route('test-call-back') { }
       end
 
       routes.routes.should == {"test-call-back"=>{:rules => [], :constraints => []}}
@@ -48,7 +48,7 @@ describe "Bushido::Mailroute" do
 
     it 'should create a route with rules for each callback added' do
       Bushido::Mailroute.map do |mapper|
-        mapper.match('test-call-back') { mapper.from('test-sender') }
+        mapper.route('test-call-back') { mapper.from('test-sender') }
       end
 
       routes.routes.should == {"test-call-back"=>{:rules => [["from", "/test-sender/", nil]], :constraints => []}}
@@ -56,10 +56,10 @@ describe "Bushido::Mailroute" do
 
     it 'should allow composable rules for the same field' do
       Bushido::Mailroute.map do |mapper|
-        mapper.match('test-call-back') {
-          mapper.body('event on :day',  {:constraints => {:day   => mapper.word             }})
-          mapper.body('at :time',       {:constraints => {:time  => mapper.ampm             }})
-          mapper.body('meet at :place', {:constraints => {:place => mapper.words_and_spaces }})
+        mapper.route('test-call-back') {
+          mapper.body('event on {:day}',  {:day   => mapper.word             })
+          mapper.body('at {:time}',       {:time  => mapper.ampm             })
+          mapper.body('meet at {:place}', {:place => mapper.words_and_spaces })
         }
       end
 
@@ -76,10 +76,10 @@ describe "Bushido::Mailroute" do
 
     it 'should allow for composable rules in any order' do
       Bushido::Mailroute.map do |mapper|
-        mapper.match('test-call-back') {
-          mapper.body('event on :day',  {:constraints => {:day   => mapper.word              }})
-          mapper.body('at :time',       {:constraints => {:time  => mapper.ampm              }})
-          mapper.body('meet at :place', {:constraints => {:place => mapper.words_and_spaces  }})
+        mapper.route('test-call-back') {
+          mapper.body('event on {:day}',  {:day   => mapper.word              })
+          mapper.body('at {:time}',       {:time  => mapper.ampm              })
+          mapper.body('meet at {:place}', {:place => mapper.words_and_spaces  })
         }
       end
 
@@ -99,7 +99,7 @@ describe "Bushido::Mailroute" do
     it 'should raise an error if an unknown check is specified' do
       lambda {
         Bushido::Mailroute.map do |mapper|
-          mapper.match('test-callback') do 
+          mapper.route('test-callback') do 
             mapper.add_constraint(:reply, :invalid_checker)
           end
         end
@@ -109,7 +109,7 @@ describe "Bushido::Mailroute" do
 
     it 'should add the constraint for the param field' do
       Bushido::Mailroute.map do |mapper|
-        mapper.match('test-callback') do
+        mapper.route('test-callback') do
           mapper.add_constraint(:reply, :required)
         end
       end
@@ -129,13 +129,12 @@ describe "Bushido::Mailroute" do
 
 
       Bushido::Mailroute.map do |mapper|
-        mapper.match('example-callback') do
+        mapper.route('example-callback') do
           mapper.add_constraint(:reply, :required)
 
-          mapper.subject("^:prefix: :command",
-                         :constraints => {
-                           :prefix => /[a-zA-Z \-_!]*/,
-                           :command => /[a-zA-Z \-_!]*/})
+          mapper.subject("^{:prefix}: {:command}",
+                         :prefix => /[a-zA-Z \-_!]*/,
+                         :command => /[a-zA-Z \-_!]*/)
         end
       end
     end

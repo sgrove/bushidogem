@@ -54,8 +54,10 @@ module Bushido
       self.class_eval do
         field_names.each do |field_name|
           define_method field_name do |line, *args|
-            options = args.first || {:constraints => {}}
-            add_route_rule(field_name.to_s, build_matcher(line, options[:constraints]), options[:required])
+            constraints = args.first || {}
+            required    = args[1]
+
+            add_route_rule(field_name.to_s, build_matcher(line, constraints), required)
           end
         end
       end
@@ -81,12 +83,19 @@ module Bushido
       /[\w|\s]+/
     end
 
+    def month
+      /((?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:tember)?|Sept|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?))/
+    end
+
+    def year
+      /((?:(?:[1]{1}\\d{1}\\d{1}\\d{1})|(?:[2]{1}\\d{3})))(?![\\d])/
+    end
 
     def initialize
       @routes ||= ActiveSupport::OrderedHash.new
     end
 
-    def match(target, &block)
+    def route(target, &block)
       @routes[@current_target = target] = {:rules => [], :constraints => []}
       yield self
     end
@@ -109,7 +118,6 @@ module Bushido
     end
 
     def process(mail)
-      puts "Processing mail through routes!"
       @params = preprocess_mail(mail)
 
       # Iterate through the routes and test each rule for each route against current mail
@@ -123,20 +131,19 @@ module Bushido
             _matches = false
             break
           end
-
+          
           # Only Ruby 1.9 support named capture groups
           result.names.each { |key| @params[key] = result[key] }
         end
         
         # Run param-based constraints
         if _matches and constraints_pass?(definition[:constraints], params)
-          params['mail'] = mail
-          puts "About to fire this thins: #{params.inspect}, #{route_name}"
+          @params['mail'] = mail
+          puts "About to fire this this: #{@params.inspect}, #{route_name}"
           return Bushido::Data.fire(params, route_name.gsub('.', '_'))
           break
         end
 
-        puts "No routes matched :("
       end
     end
 
@@ -167,7 +174,7 @@ module Bushido
 
     def build_matcher(line, constraints)
       temp = "/#{line}/"
-      constraints.keys.each { |key| temp.gsub!(":#{key}", "(?<#{key}>#{constraints[key].inspect[1..-2]})")  }
+      constraints.keys.each { |key| temp.gsub!("{:#{key}}", "(?<#{key}>#{constraints[key].inspect[1..-2]})")  }
       temp
     end
 
