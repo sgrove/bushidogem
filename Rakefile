@@ -4,6 +4,8 @@ require 'bundler'
 require 'ci/reporter/rake/rspec'
 Bundler::GemHelper.install_tasks
 
+Dir['tasks/**/*.rake'].each { |rake| load rake }
+
 task :default => :test
 
 desc "Run bushido tests"
@@ -15,3 +17,7 @@ end
 
 desc "run rspec tests"
 RSpec::Core::RakeTask.new('spec')
+
+if ENV["RAILS_ENV"] != "production"
+  require 'ci/reporter/rake/rspec'
+end

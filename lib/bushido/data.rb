@@ -1,33 +1,22 @@
 module Bushido
   class Data #:nodoc:
+    @@observers = []
+
+    def self.add_observer(observer)
+      puts "Subscribing #{observer} to Bushido data calls"
+      @@observers << observer
+    end
     
-    extend Hooks
-
-    class << self
-      def attach(*models)
-        # Total no-op, we just need to load the classes in order to
-        # register the hooks, and this does that.
-      end
-
-      
-      def publish(model, model_data)
-        # POST to /apps/:id/bus
-        data = {}
-        data[:key] = Bushido::Platform.key
-
-        data["data"]  = model_data
-        data["data"]["ido_model"] = model
-        #puts "Publishing Ido model"
-        #puts data.to_json
-        #puts Bushido::Platform.publish_url
-
-        # TODO: Catch non-200 response code
-        response = JSON.parse(RestClient.post(Bushido::Platform.publish_url, data.to_json, :content_type => :json, :accept => :json))
-        if response['ido_id'].nil? or response['ido_version'].nil?
-          return false
+    def self.fire(data, event)
+      puts "Bushido Hooks Firing #{event} with => #{data.inspect}"
+      @@observers.each do |observer|
+        puts "#{observer}.respond_to?(#{event}) => #{observer.respond_to?(event)}"
+        if observer.respond_to?(event)
+          # Make a copy of the data so it's not mutated as the events
+          # pass through the observers
+          observer.instance_variable_set("@params", data.dup)
+          observer.send(event)
         end
-
-        return response
       end
     end
   end

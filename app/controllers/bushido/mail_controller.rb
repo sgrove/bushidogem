@@ -4,8 +4,8 @@ module Bushido
 
     # POST /bushido/mail
     def index
-      hook_data             = {}
-
+      puts "Handling email!"
+      mail = {}
       attachments = []
 
       # Strip the attachments first
@@ -15,12 +15,16 @@ module Bushido
 
       # Copy the params to the hook data
       (params.keys - ["controller", "action"]).each do |param|
-        hook_data[param.downcase] = params[param]
+        mail[param.downcase] = params[param]
       end
 
-      hook_data["attachments"] = attachments
+      mail["attachments"] = attachments
 
-      Bushido::Data.fire(hook_data, "mail.received")
+      puts "params: #{params.inspect}"
+      puts "mail: #{mail.inspect}"
+
+      # Mailroute is in charge of figuring out which callback to trigger
+      Bushido::Mailroute.routes.process(mail)
       render :text => "ok", :status => 200
     end
   end

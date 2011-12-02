@@ -22,8 +22,9 @@ module Bushido
       hook_data["data"]     = params["data"]
 
       puts "Firing with: #{hook_data.inspect}"
+      event = "#{params['category']}.#{params['event']}".gsub('.', '_').to_sym
 
-      Bushido::Data.fire(hook_data, "#{params['category']}.#{params['event']}")
+      Bushido::Data.fire(hook_data, event)
 
       respond_to do |format|
         format.json {render :json => {'acknowledged' => true}, :status => 200}

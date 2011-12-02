@@ -26,6 +26,8 @@ module Bushido #:nodoc:
   require "bushido/middleware"
   require "bushido/models"
   require "bushido/schema"
+  require "bushido/event_observer"
+  require "bushido/mail_route"
 
   # Manually require the controllers for rails 2
   if defined?(Rails) && Rails::VERSION::MAJOR == 2
