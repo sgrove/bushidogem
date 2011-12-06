@@ -4,7 +4,7 @@ gem "rdoc"
 gem "rails", "2.3.14"
 gem "sqlite3"
 
-gem "bushido", :path => "../../"
+gem "bushido", :path => "../../../"
 
 group :development, :test do
   gem "rspec"
