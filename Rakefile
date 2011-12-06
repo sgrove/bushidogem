@@ -6,17 +6,30 @@ Bundler::GemHelper.install_tasks
 
 Dir['tasks/**/*.rake'].each { |rake| load rake }
 
-task :default => :test
+desc "Default: run all specs"
+task :default => :all_specs
 
-desc "Run bushido tests"
-Rake::TestTask.new(:test) do |t|
-  t.libs += ["lib", "test"]
-  t.test_files = FileList['test/*_test.rb']
-  t.verbose = true
+desc "Run all specs"
+task :all_specs do
+  Rake::Task["spec"].execute
+  Rake::Task["dummy_specs"].execute
 end
 
-desc "run rspec tests"
-RSpec::Core::RakeTask.new('spec')
+desc "run unit tests in dummy apps"
+task :dummy_specs do
+  Dir['spec/test_apps/**/Rakefile'].each do |rakefile|
+    directory_name = File.dirname(rakefile)
+    sh <<-CMD
+      cd #{directory_name} && bundle exec rake
+    CMD
+  end
+end
+
+desc "run unit tests for gem only"
+RSpec::Core::RakeTask.new('spec') do |t|
+ t.pattern = '**/gem_spec/*_spec.rb'				  
+end
+
 
 if ENV["RAILS_ENV"] != "production"
   require 'ci/reporter/rake/rspec'
