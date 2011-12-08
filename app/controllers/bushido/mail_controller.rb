@@ -25,7 +25,8 @@ module Bushido
 
       # Mailroute is in charge of figuring out which callback to trigger
       Bushido::Mailroute.routes.process(mail)
-      render :text => "ok", :status => 200
+      result = {:success => true, :message => nil, :data => {}}
+      render :text => result.to_json, :status => 200
     end
   end
 end
