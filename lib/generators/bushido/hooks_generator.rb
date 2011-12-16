@@ -1,10 +1,11 @@
 module Bushido
   module Generators
-    class UserHooksGenerator < Rails::Generators::Base
-  
-      def create_user_hooks_file
+    class HooksGenerator < Rails::Generators::Base
+        
+      def create_hooks_file
+
         lib("bushido/hooks/user_hooks.rb") do
-          <<-EOF
+<<-EOF
 class BushidoUserHooks < Bushido::EventObserver
   def user_added
     user.create(:email  => params['data']['email'],
@@ -19,13 +20,24 @@ end
 EOF
         end
         
-        initializer "bushido_hooks.rb" do
-          <<-EOF
-Dir["\#{Dir.pwd}/lib/bushido/**/*.rb"].each { |file| require file }
-          EOF
+        lib('bushido/hooks/app_hooks.rb') do
+<<-EOF
+class BushidoAppHooks < Bushido::EventObserver
+  def app_claimed
+    User.find(1).update_attributes(:email  => params['data']['email'],
+      :ido_id => params['data']['ido_id'])
+  end
+end
+EOF
         end
         
+        initializer "bushido_hooks.rb" do
+<<-EOF
+Dir["\#{Dir.pwd}/lib/bushido/**/*.rb"].each { |file| require file }
+EOF
+        end
       end
+
     end
   end
 end
