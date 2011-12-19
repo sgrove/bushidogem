@@ -10,7 +10,7 @@ module Bushido
           <<-EOF
 ::Bushido::Mailroute.map do |m|
 
-  m.route("mail.simple") do
+  m.route("simple") do
     m.subject("hello")
   end
 
