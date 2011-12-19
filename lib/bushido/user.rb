@@ -43,6 +43,17 @@ module Bushido
           Bushido::Command.post_command(remove_unity_url, params)
       end
 
+      # To send a notification to a user who belongs to your app
+      # Bushido::User.notify('5z325f4knbm2f', 'Example title', 'Example message', 'chat')
+      def notify(ido_id, title, body, category="general")
+        params            = {}
+        params[:ido_id]   = ido_id
+        params[:title]    = title
+        params[:body]     = body
+        params[:category] = category
+
+        Bushido::Command.post_command(notify_user_url, params)
+      end
     end
   end
 end

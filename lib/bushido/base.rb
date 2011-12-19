@@ -2,10 +2,14 @@ module Bushido
   class Base
     class << self
       url_pairs = {
-                    :unity=>[:valid, :exists, :invite, :pending_invites, :remove],
+                    :unity=>[:valid, :exists, :invite, :pending_invites, :remove, :notify],
                     :email=>[:send, :allowed]
                   }
-      
+
+      def notify_user_url
+        "#{Bushido::Platform.host}/notifications.json"
+      end
+
       # NOTE Cannot use define_singleton_method since ruby 1.8 compatibility is a must
       url_pairs.each_pair do |prefix, method_names|
         method_names.each do |method_name|
