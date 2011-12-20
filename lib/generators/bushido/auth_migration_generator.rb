@@ -14,7 +14,7 @@ module Bushido
         fields_to_add << "timezone"   if not new_resource.respond_to?(:timezone)
 
 
-        attr_accessor_string = (fields_to_add.collect! { |field| ":"+field}).join ", "
+        attr_accessor_string = (fields_to_add.collect { |field| ":"+field}).join ", "
         
         inject_into_class "app/models/#{class_name.underscore}.rb", class_name do
 <<-EOF
@@ -32,7 +32,7 @@ EOF
 
         gem("devise_bushido_authenticatable")
 
-        generate("migration", "AddBushidoFieldsTo#{class_name}", *fields_to_add.collect! { |field| field + ":string"})
+        generate("migration", "AddBushidoFieldsTo#{class_name}", *fields_to_add.collect { |field| field + ":string"})
         generate("migration", "AddIndexForIdoIdTo#{class_name}")
         Dir["db/migrate/*add_index_for_ido_id_to*"].each do |file|
           inject_into_file file, :after => "class AddIndexForIdoIdToUser < ActiveRecord::Migration\n  def change\n" do
