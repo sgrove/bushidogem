@@ -12,19 +12,25 @@ module Bushido
         fields_to_add << "email"      if not new_resource.respond_to?(:email)
         fields_to_add << "locale"     if not new_resource.respond_to?(:locale)
         fields_to_add << "timezone"   if not new_resource.respond_to?(:timezone)
+
+
+        attr_accessor_string = (fields_to_add.collect! { |field| ":"+field}).join ", "
         
         inject_into_class "app/models/#{class_name.underscore}.rb", class_name do
 <<-EOF
-  attr_accessor :ido_id\n
+  attr_accessor #{attr_accessor_string}\n
 
   def bushido_extra_attributes(extra_attributes)
     self.first_name = extra_attributes["first_name"].to_s
     self.last_name  = extra_attributes["last_name"].to_s
     self.email      = extra_attributes["email"]
     self.locale     = extra_attributes["locale"]
+    self.timezone   = extra_attributes["timezone"]
   end
 EOF
         end
+
+        gem("devise_bushido_authenticatable")
 
         generate("migration", "AddBushidoFieldsTo#{class_name}", *fields_to_add.collect! { |field| field + ":string"})
         generate("migration", "AddIndexForIdoIdTo#{class_name}")
@@ -38,4 +44,3 @@ EOF
     end
   end
 end
-
