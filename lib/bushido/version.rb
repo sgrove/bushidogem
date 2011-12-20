@@ -1,4 +1,4 @@
 module Bushido
   # Current version of the Bushido gem 
-  VERSION = "0.0.21"
+  VERSION = "0.0.35"
 end
