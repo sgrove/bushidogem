@@ -14,7 +14,7 @@ module Bushido
         fields_to_add << "timezone"   if not new_resource.respond_to?(:timezone)
 
 
-        attr_accessor_string = (fields_to_add.collect { |field| ":"+field}).join ", "
+        attr_accessor_string = fields_to_add.collect { |field| ":"+field}.join(", ")
         
         inject_into_class "app/models/#{class_name.underscore}.rb", class_name do
 <<-EOF
