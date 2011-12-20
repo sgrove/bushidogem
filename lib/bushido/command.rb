@@ -15,8 +15,8 @@ module Bushido
 
         begin
           raw = RestClient.get(url, {:params => params, :accept => :json})
-        rescue => e
-          puts e.inspect
+        rescue # => e
+          # puts e.inspect
           @@last_request_successful = false
           return nil
         end
@@ -27,12 +27,15 @@ module Bushido
 
       def post_command(url, params)
         @@request_count += 1
-        params.merge!({:auth_token => Bushido::Platform.key}) if params[:auth_token].nil? unless Bushido::Platform.key.nil?
+        
+        unless Bushido::Platform.key.nil?
+          params["auth_token"] ||= Bushido::Platform.key
+        end
 
         begin
           raw = RestClient.post(url, params.to_json, :content_type => :json, :accept => :json)
-        rescue => e
-          puts e.inspect
+        rescue # => e
+          # puts e.inspect
           @@last_request_successful = false
           return nil
         end
@@ -43,34 +46,32 @@ module Bushido
 
       def put_command(url, params, meta={})
         @@request_count += 1
+        
         if meta[:force]
           params.merge!({:auth_token => Bushido::Platform.key}) if params[:auth_token].nil? unless Bushido::Platform.key.nil?
 
           begin
             raw = RestClient.put(url, params.to_json,  :content_type => :json)
-          rescue => e
-            puts e.inspect
+          rescue # => e
+            # puts e.inspect
             @@last_request_successful = false
             return nil
           end
-
-          @@last_request_successful = true
-          @@last_request = JSON.parse raw
 
         else
           params.merge!({:auth_token => Bushido::Platform.key}) if params[:auth_token].nil? unless Bushido::Platform.key.nil?
 
           begin
             raw = RestClient.put(url, params.to_json,  :content_type => :json)
-          rescue => e
-            puts e.inspect
+          rescue # => e
+            #puts e.inspect
             @@last_request_successful = false
             return nil
           end
-
-          @@last_request_successful = true
-          @@last_request = JSON.parse raw
         end
+        
+        @@last_request_successful = true
+        @@last_request = JSON.parse raw
       end
 
       def show_response(response)
