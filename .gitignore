@@ -1,1 +1,7 @@
 Gemfile.lock
+\#*#
+doc/**
+pkg/**
+coverage.data
+pkg
+.rvmrc
