@@ -77,9 +77,9 @@ describe "Bushido::Mailroute" do
     it 'should allow for composable rules in any order' do
       Bushido::Mailroute.map do |mapper|
         mapper.route('test-call-back') {
-          mapper.body('event on {:day}',  {:day   => mapper.word              })
-          mapper.body('at {:time}',       {:time  => mapper.ampm              })
-          mapper.body('meet at {:place}', {:place => mapper.words_and_spaces  })
+          mapper.body('event on {:day}',  {:day   => mapper.word             })
+          mapper.body('at {:time}',       {:time  => mapper.ampm             })
+          mapper.body('meet at {:place}', {:place => mapper.words_and_spaces })
         }
       end
 
@@ -152,7 +152,7 @@ describe "Bushido::Mailroute" do
     end
 
     it "should fire the callback when finding a successful route" do
-      Bushido::Data.should_receive(:fire).with(instance_of(Hash), 'example-callback')
+      Bushido::Data.should_receive(:fire).with(instance_of(Hash), 'mail_example-callback')
 
       routes.process(@reply_email)
     end
