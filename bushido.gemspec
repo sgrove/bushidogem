@@ -15,11 +15,12 @@ Gem::Specification.new do |s|
   s.add_dependency "rest-client", ">=1.6.1"
   s.add_dependency "json",        ">=1.4.6"
   s.add_dependency "highline",    ">=1.6.1"
+  s.add_dependency "orm_adapter", "~> 0.0.3"
 
   s.rubyforge_project = "bushido"
 
   s.files         = `git ls-files`.split("\n")
-  s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
+  s.test_files    = `git ls-files -- {test,test_app,spec,features}/*`.split("\n")
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
 end
