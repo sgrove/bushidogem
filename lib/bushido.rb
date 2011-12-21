@@ -10,6 +10,7 @@ module Bushido #:nodoc:
   end
   require "rails/routes"
   require "bushido/base"
+  require "bushido/bar"
   require "bushido/config"
   require "bushido/smtp"
   require "bushido/action_mailer"

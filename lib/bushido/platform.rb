@@ -30,6 +30,18 @@ module Bushido
       def on_bushido?
         ENV['HOSTING_PLATFORM']=="bushido"
       end
+
+      def claimed?
+        (ENV['BUSHIDO_CLAIMED'].nil? or ENV['BUSHIDO_CLAIMED'].blank?) ? false : true
+      end
+
+      def metrics_token
+        ENV['BUSHIDO_METRICS_TOKEN']
+      end
+
+      def bushido_js_source
+        "#{Bushido::Platform.host}/api/bushido.js"
+      end
     end
   end
 end
