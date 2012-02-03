@@ -7,7 +7,6 @@ module Bushido #:nodoc:
   require 'bushido/engine'  
   if defined?(Rails) && Rails::VERSION::MAJOR == 3
     require "action_dispatch"
-    require "bushido/mailer"
   end
   require "rails/routes"
   require "bushido/base"
@@ -41,7 +40,7 @@ module Bushido #:nodoc:
   end
 
   if defined?(Rails) && Rails::VERSION::MAJOR == 3
-    Rails.application.config.action_mailer = ::Bushido::Mailer
+    Bushido::SMTP.setup_action_mailer_smtp!
   end
   
   # Default way to setup Bushido. Run rails generate bushido_install to create
