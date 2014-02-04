@@ -13,7 +13,7 @@ module Bushido #:nodoc:
   require "bushido/bar"
   require "bushido/config"
   require "bushido/smtp"
-  require "bushido/action_mailer"
+  
   require "hooks"
   require "bushido/platform"
   require "bushido/utils"
@@ -38,8 +38,13 @@ module Bushido #:nodoc:
     require "#{base_dir}/app/controllers/bushido/data_controller"
     require "#{base_dir}/app/controllers/bushido/mail_controller"
     require "#{base_dir}/app/controllers/bushido/envs_controller"
+    require "bushido/action_mailer"
   end
 
+  if defined?(Rails) && Rails::VERSION::MAJOR == 3
+    Bushido::SMTP.setup_action_mailer_smtp!
+  end
+  
   # Default way to setup Bushido. Run rails generate bushido_install to create
   # a fresh initializer with all configuration values.
   def self.setup
